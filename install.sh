@@ -1,13 +1,13 @@
 VIMPLUG=https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 VIMPLUG_PATH=$HOME/.config/nvim/autoload
 DEIN=https://github.com/Shougo/dein.vim.git
-DEIN_PATH=~/.config/nvim/dein.vim/repos/github.com/Shougo
+DEIN_PATH=~/.config/nvim/dein.vim/repos/github.com/Shougo/dein.vim
 
 if [ ! -d "$VIMPLUG_PATH" ] ; then
     mkdir -p "$VIMPLUG_PATH"
 fi
 
-wget $VIMPLUG -O "$VIMPLUG_PATH"
+wget $VIMPLUG -O "$VIMPLUG_PATH/plug.vim"
 
 if [ ! -d "$DEIN_PATH" ] ; then
     mkdir -p "$DEIN_PATH"
