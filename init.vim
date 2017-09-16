@@ -49,10 +49,7 @@ if dein#load_state('~/.config/nvim/dein.vim')
     " rust
     call dein#add('sebastianmarkow/deoplete-rust')
     " php
-    call dein#add('lvht/phpcd.vim', {
-                \ 'build': 'composer install',
-                \ 'on_ft': 'php'
-                \ })
+    call dein#add('shawncplus/phpcomplete.vim')
     " javascript
     call dein#add('carlitux/deoplete-ternjs')
     " elixir
@@ -147,6 +144,8 @@ if dein#load_state('~/.config/nvim/dein.vim')
     call dein#add('jlanzarotta/bufexplorer')
 
     " interface
+    call dein#add('ryanoasis/vim-devicons')
+    call dein#add('tiagofumo/vim-nerdtree-syntax-highlight')
     call dein#add('justinmk/vim-dirvish')
     call dein#add('itchyny/calendar.vim')
     call dein#add('scrooloose/nerdtree')
@@ -225,12 +224,26 @@ set tabstop=4
 set hlsearch
 set smartcase
 set incsearch
+set ignorecase
+
 
 " maps 
 let g:mapleader = ','
 
 nnoremap <Leader>ev :vsplit ~/.config/nvim/init.vim<CR>
 
+nnoremap <Leader>tn :tabnew<cr>
+nnoremap <Leader>to :tabonly<cr>
+nnoremap <Leader>tc :tabclose<cr>
+nnoremap <Leader>tm :tabmove<cr>
+nnoremap <Leader>tl :tabnext<cr>
+nnoremap <Leader>th :tabprevious<cr>
+nnoremap <Leader>te :tabedit <c-r>=expand("%:p:h")<cr>/
+
+" swith to last active tab
+let g:lasttab = 1
+nnoremap <Leader>ts :exe "tabn ".g:lasttab<CR>
+autocmd TabLeave * let g:lasttab = tabpagenr()
 " undo history
 set undodir=~/.config/nvim/undodir/
 set undofile
@@ -241,7 +254,7 @@ autocmd BufRead,BufNewFile *.ts setlocal filetype=typescript
 """""""""""""""""""""""" deoplete """"""""""""""""""""""""""""""""
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#enable_smart_case = 1
-let g:deoplete#auto_complete_start_length = 3
+let g:deoplete#auto_complete_start_length = 2
 
 " <C-h>, <BS>: close popup and delete backword char.
 inoremap <expr><C-h> deoplete#smart_close_popup()."\<C-h>"
@@ -356,10 +369,6 @@ let g:deoplete#sources#ternjs#filetypes = [
                 \ ]
 
 
-" phpcd
-let g:deoplete#ignore_sources = get(g:, 'deoplete#ignore_sources', {})
-let g:deoplete#ignore_sources.php = ['omni']
-
 " clojure 
 let g:deoplete#keyword_patterns = {}
 let g:deoplete#keyword_patterns.clojure = '[\w!$%&*+/:<=>?@\^_~\-\.#]*'
@@ -384,6 +393,13 @@ let g:ctrlp_show_hidden = 1
 " airline
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#ale#enabled = 1
+
+" devicons
+if $TERM=~#'xterm-256color'
+    let g:NERDTreeFileExtensionHighlightFullName = 1
+    let g:NERDTreeExactMatchHighlightFullName = 1
+    let g:NERDTreePatternMatchHighlightFullName = 1
+endif
 
 " delimitMate
 let g:delimitMate_expand_cr = 2
@@ -454,7 +470,7 @@ nmap g# g#<Plug>(anzu-update-search-status-with-echo)
 nmap <Esc><Esc> <Plug>(anzu-clear-search-status)
 
 " vim-troll-stopper
-highlight TrollStopper ctermbg=blue guibg=#FF00AA
+" highlight TrollStopper ctermbg=blue guibg=#FF00AA
 
 " incsearch.vim
 map <Leader>/ <Plug>(incsearch-forward)
