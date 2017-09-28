@@ -1,3 +1,5 @@
+#/bin/bash
+
 VIMPLUG=https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 VIMPLUG_PATH=$HOME/.config/nvim/autoload
 DEIN=https://github.com/Shougo/dein.vim.git

@@ -35,6 +35,8 @@ if dein#load_state('~/.config/nvim/dein.vim')
     " c/c++
     " call dein#add('octol/vim-cpp-enhanced-highlight')
     call dein#add('tweekmonster/deoplete-clang2')
+    call dein#add('octol/vim-cpp-enhanced-highlight')
+    call dein#add('nacitar/a.vim')
     " go
     call dein#add('fatih/vim-go')
     call dein#add('zchee/deoplete-go', {
@@ -56,6 +58,11 @@ if dein#load_state('~/.config/nvim/dein.vim')
     call dein#add('slashmili/alchemist.vim')
     " clojure
     call dein#add('clojure-vim/async-clj-omni')
+    call dein#add('clojure-vim/acid.nvim')
+    call dein#add('tpope/vim-fireplace')
+    call dein#add('clojure-vim/vim-cider')
+    " Repl
+    call dein#add('hkupty/iron.nvim')
     " java
     call dein#add('artur-shaik/vim-javacomplete2')
     " zsh
@@ -88,6 +95,8 @@ if dein#load_state('~/.config/nvim/dein.vim')
     call dein#add('haya14busa/dein-command.vim')
     call dein#add('w0rp/ale')
     call dein#add('editorconfig/editorconfig-vim')
+    " yank/ring
+    call dein#add('cyansprite/Extract')
     " test/debug
     call dein#add('janko-m/vim-test')
     " format
@@ -157,6 +166,8 @@ if dein#load_state('~/.config/nvim/dein.vim')
     call dein#add('icymind/NeoSolarized')
     call dein#add('majutsushi/tagbar')
     call dein#add('luochen1990/rainbow')
+    call dein#add('c0r73x/neotags.nvim')
+    call dein#add('hardenedapple/vsh')
 
     " Required:
     call dein#end()
@@ -210,7 +221,8 @@ if (empty($TMUX))
 endif
 
 set background=dark
-colorscheme onedark
+" colorscheme onedark
+colorscheme colorsbox-material
 
 set autoindent
 set smartindent
@@ -315,9 +327,9 @@ if !exists('g:neoinclude#paths')
     let g:neoinclude#paths = {}
 endif
 
-let g:neoinclude#paths.c = ".,/usr/lib/gcc/x86_64-pc-linux-gnu/*/include/,/usr/local/include/,/usr/lib/gcc/x86_64-pc-linux-gnu/*/include-fixed/,/usr/include/,,"
+let g:neoinclude#paths.c = '.,/usr/lib/gcc/x86_64-pc-linux-gnu/*/include/,/usr/local/include/,/usr/lib/gcc/x86_64-pc-linux-gnu/*/include-fixed/,/usr/include/,,'
 
-let g:neoinclude#paths.cpp = ".,/usr/include/c++/*/,/usr/include/c++/*/x86_64-pc-linux-gnu/,/usr/include/c++/*/backward/,/usr/lib/gcc/x86_64-pc-linux-gnu/*/include/,/usr/local/include/, /usr/lib/gcc/x86_64-pc-linux-gnu/*/include-fixed/, /usr/lib/gcc/x86_64-pc-linux-gnu/*/include/g++-v6/, /usr/lib/gcc/x86_64-pc-linux-gnu/*/include/g++-v6/backward, /usr/lib/gcc/x86_64-pc-linux-gnu/*/include/g++-v6/x86_64-pc-linux-gnu/, /usr/include/,,"
+let g:neoinclude#paths.cpp = '.,/usr/include/c++/*/,/usr/include/c++/*/x86_64-pc-linux-gnu/,/usr/include/c++/*/backward/,/usr/lib/gcc/x86_64-pc-linux-gnu/*/include/,/usr/local/include/, /usr/lib/gcc/x86_64-pc-linux-gnu/*/include-fixed/, /usr/lib/gcc/x86_64-pc-linux-gnu/*/include/g++-v6/, /usr/lib/gcc/x86_64-pc-linux-gnu/*/include/g++-v6/backward, /usr/lib/gcc/x86_64-pc-linux-gnu/*/include/g++-v6/x86_64-pc-linux-gnu/, /usr/include/,,'
 
 
 
@@ -393,6 +405,8 @@ let g:ctrlp_show_hidden = 1
 " airline
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#ale#enabled = 1
+let g:airline_theme = 'onedark'
+" let g:airline_powerline_fonts = 1
 
 " devicons
 if $TERM=~#'xterm-256color'
@@ -406,9 +420,6 @@ let g:delimitMate_expand_cr = 2
 let g:delimitMate_expand_space = 1
 let g:delimitMate_balance_matchpairs = 1
 let g:delimitMate_jump_expansion = 1
-let g:delimitMate_matchpairs = '(:),[:],{:},<:>'
-au FileType html,xml,xhtml,gentoo-package-use,gentoo-package-keywords let b:delimitMate_matchpairs = '(:),[:],{:}'
-
 
 " Make VIM remember position in file after reopen
 if has('autocmd')
