@@ -15,7 +15,6 @@ if dein#load_state('~/.config/nvim/dein.vim')
     " Required:
     call dein#add('~/.config/nvim/dein.vim/repos/github.com/Shougo/dein.vim')
 
-    " Add or remove your plugins here:
     call dein#add('Shougo/deoplete.nvim')
     call dein#add('Shougo/neosnippet.vim')
     call dein#add('Shougo/neosnippet-snippets')
@@ -33,7 +32,6 @@ if dein#load_state('~/.config/nvim/dein.vim')
     " vim
     call dein#add('Shougo/neco-vim')
     " c/c++
-    " call dein#add('octol/vim-cpp-enhanced-highlight')
     call dein#add('tweekmonster/deoplete-clang2')
     call dein#add('octol/vim-cpp-enhanced-highlight')
     call dein#add('nacitar/a.vim')
@@ -149,11 +147,12 @@ if dein#load_state('~/.config/nvim/dein.vim')
     call dein#add('dyng/ctrlsf.vim')
     call dein#add('osyo-manga/vim-anzu')
     call dein#add('haya14busa/incsearch.vim')
+    call dein#add('brooth/far.vim')
+    call dein#add('wincent/ferret')
     " buf
     call dein#add('jlanzarotta/bufexplorer')
 
     " interface
-    call dein#add('ryanoasis/vim-devicons')
     call dein#add('tiagofumo/vim-nerdtree-syntax-highlight')
     call dein#add('justinmk/vim-dirvish')
     call dein#add('itchyny/calendar.vim')
@@ -166,8 +165,9 @@ if dein#load_state('~/.config/nvim/dein.vim')
     call dein#add('icymind/NeoSolarized')
     call dein#add('majutsushi/tagbar')
     call dein#add('luochen1990/rainbow')
-    call dein#add('c0r73x/neotags.nvim')
+    " call dein#add('c0r73x/neotags.nvim')
     call dein#add('hardenedapple/vsh')
+    call dein#add('wincent/terminus')
 
     " Required:
     call dein#end()
@@ -190,6 +190,7 @@ function! BuildComposer(info)
 endfunction
 
 Plug 'euclio/vim-markdown-composer', {'do': function('BuildComposer')}
+Plug 'wincent/command-t', {'do': 'cd ruby/command-t/ext/command-t && ruby extconf.rb && make'}
 
 call plug#end()
 
@@ -241,6 +242,7 @@ set ignorecase
 
 " maps 
 let g:mapleader = ','
+let g:maplocalleader = '\'
 
 nnoremap <Leader>ev :vsplit ~/.config/nvim/init.vim<CR>
 
@@ -401,6 +403,11 @@ let g:ctrlp_max_height = 20
 let g:ctrlp_custom_ignore = 'node_modules\|^\.DS_Store\|^\.git\|^\.coffee'
 let g:ctrlp_max_depth = 20
 let g:ctrlp_show_hidden = 1
+
+" command-t
+nmap <silent> <Leader>tt <Plug>(CommandT)
+nmap <silent> <Leader>tb <Plug>(CommandTBuffer)
+nmap <silent> <Leader>tj <Plug>(CommandTJump)
 
 " airline
 let g:airline#extensions#tabline#enabled = 1
