@@ -100,8 +100,6 @@ if dein#load_state('~/.config/nvim/dein.vim')
     call dein#add('w0rp/ale')
     call dein#add('editorconfig/editorconfig-vim')
     call dein#add('chrisbra/SudoEdit.vim')
-    " yank/ring
-    call dein#add('cyansprite/Extract')
     " test/debug
     call dein#add('janko-m/vim-test')
     call dein#add('dbgx/lldb.nvim')
