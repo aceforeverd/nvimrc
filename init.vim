@@ -69,14 +69,20 @@ if dein#load_state('~/.config/nvim/dein.vim')
     call dein#add('jalvesaq/Nvim-R')
     " haskell
     call dein#add('eagletmt/neco-ghc')
+    call dein#add('neovimhaskell/haskell-vim')
     " html
     call dein#add('othree/html5.vim')
     call dein#add('mattn/emmet-vim')
     " css
     call dein#add('ap/vim-css-color', {'merged': 0})
     call dein#add('hail2u/vim-css3-syntax', {'on_ft': ['css', 'scss', 'html']})
+    " csv
+    call dein#add('chrisbra/csv.vim')
     " markdown
     call dein#add('plasticboy/vim-markdown')
+    call dein#add('euclio/vim-markdown-composer', {
+                \ 'build': 'cargo build --release'
+                \ })
     " Language tool
     call dein#add('rhysd/vim-grammarous', {'merged': 0})
     call dein#add('autozimu/LanguageClient-neovim')
@@ -93,10 +99,12 @@ if dein#load_state('~/.config/nvim/dein.vim')
     call dein#add('haya14busa/dein-command.vim')
     call dein#add('w0rp/ale')
     call dein#add('editorconfig/editorconfig-vim')
+    call dein#add('chrisbra/SudoEdit.vim')
     " yank/ring
     call dein#add('cyansprite/Extract')
     " test/debug
     call dein#add('janko-m/vim-test')
+    call dein#add('dbgx/lldb.nvim')
     " format
     call dein#add('sbdchd/neoformat')
     call dein#add('rhysd/vim-clang-format')
@@ -149,14 +157,15 @@ if dein#load_state('~/.config/nvim/dein.vim')
     call dein#add('haya14busa/incsearch.vim')
     call dein#add('brooth/far.vim')
     call dein#add('wincent/ferret')
-    " buf
-    call dein#add('jlanzarotta/bufexplorer')
+    call dein#add('wincent/command-t', {
+                \ 'build': 'cd ruby/command-t/ext/command-t && ruby extconf.rb && make'
+                \ })
 
     " interface
+    call dein#add('scrooloose/nerdtree')
     call dein#add('tiagofumo/vim-nerdtree-syntax-highlight')
     call dein#add('justinmk/vim-dirvish')
     call dein#add('itchyny/calendar.vim')
-    call dein#add('scrooloose/nerdtree')
     call dein#add('mhinz/vim-startify')
     call dein#add('kshenoy/vim-signature')
     call dein#add('vim-airline/vim-airline')
@@ -168,6 +177,8 @@ if dein#load_state('~/.config/nvim/dein.vim')
     " call dein#add('c0r73x/neotags.nvim')
     call dein#add('hardenedapple/vsh')
     call dein#add('wincent/terminus')
+    call dein#add('lfv89/vim-interestingwords')
+    call dein#add('ntpeters/vim-better-whitespace')
 
     " Required:
     call dein#end()
@@ -189,9 +200,6 @@ function! BuildComposer(info)
     endif
 endfunction
 
-Plug 'euclio/vim-markdown-composer', {'do': function('BuildComposer')}
-Plug 'wincent/command-t', {'do': 'cd ruby/command-t/ext/command-t && ruby extconf.rb && make'}
-
 call plug#end()
 
 " Required:
@@ -204,26 +212,22 @@ syntax enable
 "endif
 
 set number
+set background=dark
 
-"Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
-"If you're using tmux version 2.2 or later, you can remove the outermost $TMUX check and use tmux's 24-bit color support
-"(see < http://sunaku.github.io/tmux-24bit-color.html#usage > for more information.)
 if (empty($TMUX))
+    " outside tmux
     if (has('nvim'))
-        "For Neovim 0.1.3 and 0.1.4 < https://github.com/neovim/neovim/pull/2198 >
         let $NVIM_TUI_ENABLE_TRUE_COLOR=1
     endif
-    "For Neovim > 0.1.5 and Vim > patch 7.4.1799 < https://github.com/vim/vim/commit/61be73bb0f965a895bfb064ea3e55476ac175162 >
-    "Based on Vim patch 7.4.1770 (`guicolors` option) < https://github.com/vim/vim/commit/8a633e3427b47286869aa4b96f2bfc1fe65b25cd >
-    " < https://github.com/neovim/neovim/wiki/Following-HEAD#20160511 >
+
     if (has('termguicolors'))
         set termguicolors
     endif
+    colorscheme colorsbox-material
+else
+    set notermguicolors
+    colorscheme torte
 endif
-
-set background=dark
-" colorscheme onedark
-colorscheme colorsbox-material
 
 set autoindent
 set smartindent
@@ -239,8 +243,7 @@ set smartcase
 set incsearch
 set ignorecase
 
-
-" maps 
+" maps
 let g:mapleader = ','
 let g:maplocalleader = '\'
 
@@ -322,8 +325,8 @@ autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
 if !exists('g:neoinclude#exts')
     let g:neoinclude#exts = {}
 endif
+let g:neoinclude#exts.c = ['', 'h']
 let g:neoinclude#exts.cpp = ['', 'h', 'hpp', 'hxx']
-
 
 if !exists('g:neoinclude#paths')
     let g:neoinclude#paths = {}
@@ -333,11 +336,6 @@ let g:neoinclude#paths.c = '.,/usr/lib/gcc/x86_64-pc-linux-gnu/*/include/,/usr/l
 
 let g:neoinclude#paths.cpp = '.,/usr/include/c++/*/,/usr/include/c++/*/x86_64-pc-linux-gnu/,/usr/include/c++/*/backward/,/usr/lib/gcc/x86_64-pc-linux-gnu/*/include/,/usr/local/include/, /usr/lib/gcc/x86_64-pc-linux-gnu/*/include-fixed/, /usr/lib/gcc/x86_64-pc-linux-gnu/*/include/g++-v6/, /usr/lib/gcc/x86_64-pc-linux-gnu/*/include/g++-v6/backward, /usr/lib/gcc/x86_64-pc-linux-gnu/*/include/g++-v6/x86_64-pc-linux-gnu/, /usr/include/,,'
 
-
-
-" use deoplete-clang2 instead
-" let g:deoplete#sources#clang#libclang_path = "/usr/include/llvm/"
-" let g:deoplete#sources#clang#clang_header = "/usr/include/llvm/"
 
 " deoplete-ternjs
 " Whether to include the types of the completions in the result data. Default: 0
@@ -383,7 +381,7 @@ let g:deoplete#sources#ternjs#filetypes = [
                 \ ]
 
 
-" clojure 
+" clojure
 let g:deoplete#keyword_patterns = {}
 let g:deoplete#keyword_patterns.clojure = '[\w!$%&*+/:<=>?@\^_~\-\.#]*'
 
@@ -413,7 +411,6 @@ nmap <silent> <Leader>tj <Plug>(CommandTJump)
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#ale#enabled = 1
 let g:airline_theme = 'onedark'
-" let g:airline_powerline_fonts = 1
 
 " devicons
 if $TERM=~#'xterm-256color'
@@ -494,3 +491,9 @@ nmap <Esc><Esc> <Plug>(anzu-clear-search-status)
 map <Leader>/ <Plug>(incsearch-forward)
 map <Leader>? <Plug>(incsearch-backward)
 map <Leader>g/ <Plug>(incsearch-stay)
+
+" easy-align
+" Start interactive EasyAlign in visual mode (e.g. vip<Enter>)
+vmap <Enter> <Plug>(EasyAlign)
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
