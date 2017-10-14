@@ -8,12 +8,12 @@ set runtimepath+=$HOME/.config/nvim/dein.vim/repos/github.com/Shougo/dein.vim
 let g:dein#install_process_timeout = 180
 let g:dein#install_process_type = 'tabline'
 " Required:
-if dein#load_state('~/.config/nvim/dein.vim')
-    call dein#begin('~/.config/nvim/dein.vim')
+if dein#load_state('$HOME/.config/nvim/dein.vim')
+    call dein#begin('$HOME/.config/nvim/dein.vim')
 
     " Let dein manage dein
     " Required:
-    call dein#add('~/.config/nvim/dein.vim/repos/github.com/Shougo/dein.vim')
+    call dein#add('$HOME/.config/nvim/dein.vim/repos/github.com/Shougo/dein.vim')
 
     call dein#add('Shougo/deoplete.nvim')
     call dein#add('Shougo/neosnippet.vim')
@@ -28,13 +28,14 @@ if dein#load_state('~/.config/nvim/dein.vim')
     call dein#add('Shougo/vinarise.vim')
     call dein#add('Shougo/echodoc.vim')
     call dein#add('ujihisa/neco-look')
+    call dein#add('hrsh7th/vim-neco-calc')
 
     " vim
     call dein#add('Shougo/neco-vim')
     " c/c++
-    call dein#add('tweekmonster/deoplete-clang2')
     call dein#add('octol/vim-cpp-enhanced-highlight')
     call dein#add('nacitar/a.vim')
+    call dein#add('Rip-Rip/clang_complete')
     " go
     call dein#add('fatih/vim-go')
     call dein#add('zchee/deoplete-go', {
@@ -67,6 +68,8 @@ if dein#load_state('~/.config/nvim/dein.vim')
     call dein#add('zchee/deoplete-zsh')
     " R
     call dein#add('jalvesaq/Nvim-R')
+    " glsl
+    call dein#add('tikhomirov/vim-glsl')
     " haskell
     call dein#add('eagletmt/neco-ghc')
     call dein#add('neovimhaskell/haskell-vim')
@@ -148,6 +151,11 @@ if dein#load_state('~/.config/nvim/dein.vim')
     call dein#add('easymotion/vim-easymotion')
     call dein#add('rhysd/clever-f.vim')
     " search
+    call dein#add('junegunn/fzf', {
+                \ 'path': '~/.fzf',
+                \ 'build': './install --key-bindings --no-completion --update-rc'
+                \ })
+    call dein#add('junegunn/fzf.vim')
     call dein#add('mhinz/vim-grepper')
     call dein#add('ctrlpvim/ctrlp.vim')
     call dein#add('dyng/ctrlsf.vim')
@@ -172,10 +180,8 @@ if dein#load_state('~/.config/nvim/dein.vim')
     call dein#add('icymind/NeoSolarized')
     call dein#add('majutsushi/tagbar')
     call dein#add('luochen1990/rainbow')
-    " call dein#add('c0r73x/neotags.nvim')
     call dein#add('hardenedapple/vsh')
     call dein#add('wincent/terminus')
-    call dein#add('lfv89/vim-interestingwords')
     call dein#add('ntpeters/vim-better-whitespace')
 
     " Required:
@@ -185,18 +191,7 @@ endif
 
 call plug#begin('~/.config/nvim/vimplug')
 
-Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --key-bindings --no-completion'}
-Plug 'junegunn/fzf.vim'
-
-function! BuildComposer(info)
-    if a:info.status != 'unchanged' || a:info.force
-        if has('nvim')
-            !cargo build --release
-        else
-            !cargo build --release --no-default-features --features json-rpc
-        endif
-    endif
-endfunction
+" Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --key-bindings --no-completion'}
 
 call plug#end()
 
@@ -245,7 +240,7 @@ set ignorecase
 let g:mapleader = ','
 let g:maplocalleader = '\'
 
-nnoremap <Leader>ev :vsplit ~/.config/nvim/init.vim<CR>
+nnoremap <Leader>ce :vsplit ~/.config/nvim/init.vim<CR>
 
 nnoremap <Leader>tn :tabnew<cr>
 nnoremap <Leader>to :tabonly<cr>
@@ -266,10 +261,15 @@ set undofile
 " filetype
 autocmd BufRead,BufNewFile *.ts setlocal filetype=typescript
 
+" echodoc
+set cmdheight=2
+let g:echodoc#enable_at_startup = 1
+
 """""""""""""""""""""""" deoplete """"""""""""""""""""""""""""""""
 let g:deoplete#enable_at_startup = 1
 let g:deoplete#enable_smart_case = 1
 let g:deoplete#auto_complete_start_length = 2
+set completeopt-=preview
 
 " <C-h>, <BS>: close popup and delete backword char.
 inoremap <expr><C-h> deoplete#smart_close_popup()."\<C-h>"
@@ -319,7 +319,7 @@ endif
 " neco-ghc
 autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
 
-" neoinclude 
+" neoinclude
 if !exists('g:neoinclude#exts')
     let g:neoinclude#exts = {}
 endif
@@ -384,9 +384,9 @@ let g:deoplete#keyword_patterns = {}
 let g:deoplete#keyword_patterns.clojure = '[\w!$%&*+/:<=>?@\^_~\-\.#]*'
 
 " neosnippet
-imap <c-k> <Plug>(neosnippet_expand_or_jump)
-smap <c-k> <Plug>(neosnippet_expand_or_jump)>
-xmap <c-k> <Plug>(neosnippet_expand_or_jump)>
+imap <Leader>e <Plug>(neosnippet_expand_or_jump)
+smap <Leader>e <Plug>(neosnippet_expand_or_jump)>
+xmap <Leader>e <Plug>(neosnippet_expand_or_jump)>
 
 " editorconfig
 let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://*']
@@ -405,22 +405,17 @@ nmap <silent> <Leader>tt <Plug>(CommandT)
 nmap <silent> <Leader>tb <Plug>(CommandTBuffer)
 nmap <silent> <Leader>tj <Plug>(CommandTJump)
 
+inoremap <C-Space> <C-x><c-o>
+
 " airline
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#ale#enabled = 1
 let g:airline_theme = 'onedark'
 
-" devicons
-if $TERM=~#'xterm-256color'
-    let g:NERDTreeFileExtensionHighlightFullName = 1
-    let g:NERDTreeExactMatchHighlightFullName = 1
-    let g:NERDTreePatternMatchHighlightFullName = 1
-endif
-
 " delimitMate
 let g:delimitMate_expand_cr = 2
 let g:delimitMate_expand_space = 1
-let g:delimitMate_balance_matchpairs = 1
+" let g:delimitMate_balance_matchpairs = 1
 let g:delimitMate_jump_expansion = 1
 
 " Make VIM remember position in file after reopen
@@ -495,3 +490,9 @@ map <Leader>g/ <Plug>(incsearch-stay)
 vmap <Enter> <Plug>(EasyAlign)
 " Start interactive EasyAlign for a motion/text object (e.g. gaip)
 nmap ga <Plug>(EasyAlign)
+
+" vim-cpp-enhanced-highlight
+" let g:cpp_class_scope_highlight = 1
+let g:cpp_member_variable_highlight = 1
+let g:cpp_class_decl_highlight = 1
+let g:cpp_concepts_highlight = 1
