@@ -1,5 +1,5 @@
 if &compatible
-    set nocompatible               " Be iMproved
+    set nocompatible
 endif
 
 " Required:
@@ -8,12 +8,12 @@ set runtimepath+=$HOME/.config/nvim/dein.vim/repos/github.com/Shougo/dein.vim
 let g:dein#install_process_timeout = 180
 let g:dein#install_process_type = 'tabline'
 " Required:
-if dein#load_state('$HOME/.config/nvim/dein.vim')
-    call dein#begin('$HOME/.config/nvim/dein.vim')
+if dein#load_state($HOME . '/.config/nvim/dein.vim')
+    call dein#begin($HOME . '/.config/nvim/dein.vim')
 
     " Let dein manage dein
     " Required:
-    call dein#add('$HOME/.config/nvim/dein.vim/repos/github.com/Shougo/dein.vim')
+    call dein#add($HOME . '/.config/nvim/dein.vim/repos/github.com/Shougo/dein.vim')
 
     call dein#add('Shougo/deoplete.nvim')
     call dein#add('Shougo/neosnippet.vim')
@@ -147,13 +147,15 @@ if dein#load_state('$HOME/.config/nvim/dein.vim')
     call dein#add('machakann/vim-sandwich')
     call dein#add('tommcdo/vim-exchange')
     call dein#add('matze/vim-move')
+    call dein#add('terryma/vim-multiple-cursors')
     " motion
     call dein#add('easymotion/vim-easymotion')
     call dein#add('rhysd/clever-f.vim')
     " search
     call dein#add('junegunn/fzf', {
-                \ 'path': '~/.fzf',
-                \ 'build': './install --key-bindings --no-completion --update-rc'
+                \ 'path': $HOME . '/.fzf',
+                \ 'build': './install --key-bindings --no-completion --update-rc',
+                \ 'merged': 0
                 \ })
     call dein#add('junegunn/fzf.vim')
     call dein#add('mhinz/vim-grepper')
@@ -170,7 +172,7 @@ if dein#load_state('$HOME/.config/nvim/dein.vim')
     " interface
     call dein#add('scrooloose/nerdtree')
     call dein#add('tiagofumo/vim-nerdtree-syntax-highlight')
-    call dein#add('justinmk/vim-dirvish')
+    " call dein#add('justinmk/vim-dirvish')
     call dein#add('itchyny/calendar.vim')
     call dein#add('mhinz/vim-startify')
     call dein#add('kshenoy/vim-signature')
@@ -191,7 +193,7 @@ endif
 
 call plug#begin('~/.config/nvim/vimplug')
 
-" Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --key-bindings --no-completion'}
+" Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --key-bindings --no-completion --update-rc'}
 
 call plug#end()
 
@@ -235,6 +237,9 @@ set hlsearch
 set smartcase
 set incsearch
 set ignorecase
+
+let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 1
+set wildignore=*.o,*~,*.pyc,*.gch,*/.git/*,*/.svn/*,*/node_modules/*,*/.idea/*,*/.DS_Store
 
 " maps
 let g:mapleader = ','
@@ -338,34 +343,34 @@ let g:neoinclude#paths.cpp = '.,/usr/include/c++/*/,/usr/include/c++/*/x86_64-pc
 " deoplete-ternjs
 " Whether to include the types of the completions in the result data. Default: 0
 let g:deoplete#sources#ternjs#types = 1
-" Whether to include the distance (in scopes for variables, in prototypes for 
-" properties) between the completions and the origin position in the result 
+" Whether to include the distance (in scopes for variables, in prototypes for
+" properties) between the completions and the origin position in the result
 " data. Default: 0
 let g:deoplete#sources#ternjs#depths = 1
 " Whether to include documentation strings (if found) in the result data.
 " Default: 0
 let g:deoplete#sources#ternjs#docs = 1
 " When on, only completions that match the current word at the given point will
-" be returned. Turn this off to get all results, so that you can filter on the 
+" be returned. Turn this off to get all results, so that you can filter on the
 " client side. Default: 1
 let g:deoplete#sources#ternjs#filter = 0
-" Whether to use a case-insensitive compare between the current word and 
+" Whether to use a case-insensitive compare between the current word and
 " potential completions. Default 0
 let g:deoplete#sources#ternjs#case_insensitive = 1
-" When completing a property and no completions are found, Tern will use some 
-" heuristics to try and return some properties anyway. Set this to 0 to 
+" When completing a property and no completions are found, Tern will use some
+" heuristics to try and return some properties anyway. Set this to 0 to
 " turn that off. Default: 1
 let g:deoplete#sources#ternjs#guess = 0
 " Determines whether the result set will be sorted. Default: 1
 let g:deoplete#sources#ternjs#sort = 0
-" When disabled, only the text before the given position is considered part of 
+" When disabled, only the text before the given position is considered part of
 " the word. When enabled (the default), the whole variable name that the cursor
 " is on will be included. Default: 1
 let g:deoplete#sources#ternjs#expand_word_forward = 0
-" Whether to ignore the properties of Object.prototype unless they have been 
+" Whether to ignore the properties of Object.prototype unless they have been
 " spelled out by at least to characters. Default: 1
 let g:deoplete#sources#ternjs#omit_object_prototype = 0
-" Whether to include JavaScript keywords when completing something that is not 
+" Whether to include JavaScript keywords when completing something that is not
 " a property. Default: 0
 let g:deoplete#sources#ternjs#include_keywords = 1
 " If completions should be returned when inside a literal. Default: 1
@@ -396,7 +401,7 @@ let g:ctrlp_working_path_mode = 'rw'
 let g:ctrlp_map = '<c-p>'
 
 let g:ctrlp_max_height = 20
-let g:ctrlp_custom_ignore = 'node_modules\|^\.DS_Store\|^\.git\|^\.coffee'
+let g:ctrlp_custom_ignore = '^node_modules\|^\.DS_Store\|^\.git\|^\.coffee\|cmake-build-debug'
 let g:ctrlp_max_depth = 20
 let g:ctrlp_show_hidden = 1
 
@@ -404,6 +409,7 @@ let g:ctrlp_show_hidden = 1
 nmap <silent> <Leader>tt <Plug>(CommandT)
 nmap <silent> <Leader>tb <Plug>(CommandTBuffer)
 nmap <silent> <Leader>tj <Plug>(CommandTJump)
+let g:CommandTWildIgnore = &wildignore
 
 inoremap <C-Space> <C-x><c-o>
 
@@ -415,7 +421,7 @@ let g:airline_theme = 'onedark'
 " delimitMate
 let g:delimitMate_expand_cr = 2
 let g:delimitMate_expand_space = 1
-" let g:delimitMate_balance_matchpairs = 1
+let g:delimitMate_balance_matchpairs = 1
 let g:delimitMate_jump_expansion = 1
 
 " Make VIM remember position in file after reopen
@@ -466,7 +472,7 @@ nmap <silent> <c-j> <Plug>(ale_next_wrap)
 let g:rainbow_active = 1
 
 " dirvish
-nmap <Leader>v <Plug>(dirvish_up)
+" nmap <Leader>v <Plug>(dirvish_up)
 
 " vim-anzu
 nmap n <Plug>(anzu-n-with-echo)
@@ -496,3 +502,21 @@ nmap ga <Plug>(EasyAlign)
 let g:cpp_member_variable_highlight = 1
 let g:cpp_class_decl_highlight = 1
 let g:cpp_concepts_highlight = 1
+
+" startify
+let g:startify_skiplist = [
+      \ '/tmp',
+      \ '/usr/share/nvim/runtime/doc',
+      \ ]
+
+" terminus
+let g:TerminusCursorShape = 1
+let g:TerminusInsertCursorShape = 1  " bar
+let g:TerminusNormalCursorShape = 0 " block
+
+" fzf
+nnoremap <Leader>f :FZF<CR>
+let g:fzf_action = {
+      \ 'ctrl-t': 'tab split',
+      \ 'ctrl-x': 'split',
+      \ 'ctrl-v': 'vsplit' }
