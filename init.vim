@@ -172,17 +172,14 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     " interface
     call dein#add('scrooloose/nerdtree')
     call dein#add('tiagofumo/vim-nerdtree-syntax-highlight')
-    " call dein#add('justinmk/vim-dirvish')
     call dein#add('itchyny/calendar.vim')
     call dein#add('mhinz/vim-startify')
     call dein#add('kshenoy/vim-signature')
     call dein#add('vim-airline/vim-airline')
     call dein#add('vim-airline/vim-airline-themes')
     call dein#add('flazz/vim-colorschemes')
-    call dein#add('icymind/NeoSolarized')
     call dein#add('majutsushi/tagbar')
     call dein#add('luochen1990/rainbow')
-    call dein#add('hardenedapple/vsh')
     call dein#add('wincent/terminus')
     call dein#add('ntpeters/vim-better-whitespace')
 
@@ -318,7 +315,12 @@ endif
 "  \ 'tern#Complete',
 "  \ 'jspc#omni'
 "  \]
-"
+
+if !exists('g:deoplete#ignore_sources')
+    let g:deoplete#ignore_sources = {}
+endif
+let g:deoplete#ignore_sources.cpp = 'look'
+
 " =========================== end of deoplete =============================================
 
 " neco-ghc
