@@ -93,14 +93,14 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('benmills/vimux')
     call dein#add('christoomey/vim-tmux-navigator', {'on_if': '!empty($TMUX)'})
     call dein#add('tmux-plugins/vim-tmux')
-    " gentoo
+    " gentoo portage syntax
     call dein#add('gentoo/gentoo-syntax')
 
     " tools
+    call dein#add('w0rp/ale')
     call dein#add('tpope/vim-sensible')
     call dein#add('tpope/vim-pathogen')
     call dein#add('haya14busa/dein-command.vim')
-    call dein#add('w0rp/ale')
     call dein#add('editorconfig/editorconfig-vim')
     call dein#add('chrisbra/SudoEdit.vim')
     " test/debug
@@ -119,7 +119,7 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('mattn/gist-vim')
     call dein#add('idanarye/vim-merginal')
     call dein#add('rhysd/committia.vim')
-
+    " history
     call dein#add('mbbill/undotree')
 
     " tools
@@ -128,10 +128,10 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('tpope/vim-unimpaired')
     call dein#add('tpope/vim-dispatch')
     call dein#add('vim-utils/vim-man')
-    call dein#add('vim-utils/vim-troll-stopper')
+    " strange highlights on fzf Helptags
+    " call dein#add('vim-utils/vim-troll-stopper')
     " comment
     call dein#add('tpope/vim-commentary')
-    call dein#add('scrooloose/nerdcommenter')
 
     call dein#add('Raimondi/delimitMate')
     call dein#add('alvan/vim-closetag')
@@ -165,9 +165,6 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('haya14busa/incsearch.vim')
     call dein#add('brooth/far.vim')
     call dein#add('wincent/ferret')
-    call dein#add('wincent/command-t', {
-                \ 'build': 'cd ruby/command-t/ext/command-t && ruby extconf.rb && make'
-                \ })
 
     " interface
     call dein#add('scrooloose/nerdtree')
@@ -190,7 +187,6 @@ endif
 
 call plug#begin('~/.config/nvim/vimplug')
 
-" Plug 'junegunn/fzf', {'dir': '~/.fzf', 'do': './install --key-bindings --no-completion --update-rc'}
 
 call plug#end()
 
@@ -236,7 +232,7 @@ set incsearch
 set ignorecase
 
 let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 1
-set wildignore=*.o,*~,*.pyc,*.gch,*/.git/*,*/.svn/*,*/node_modules/*,*/.idea/*,*/.DS_Store
+set wildignore=*.o,*~,*.pyc,*/.git/*,*/.svn/*,*/node_modules/*,*/.idea/*,*/.DS_Store
 
 " maps
 let g:mapleader = ','
@@ -380,7 +376,6 @@ let g:deoplete#sources#ternjs#in_literal = 0
 "Add extra filetypes
 let g:deoplete#sources#ternjs#filetypes = [
                 \ 'jsx',
-                \ 'javascript.jsx',
                 \ 'vue',
                 \ '...'
                 \ ]
@@ -401,17 +396,10 @@ let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://*']
 " ctrlp
 let g:ctrlp_working_path_mode = 'rw'
 let g:ctrlp_map = '<c-p>'
-
 let g:ctrlp_max_height = 20
 let g:ctrlp_custom_ignore = '^node_modules\|^\.DS_Store\|^\.git\|^\.coffee\|cmake-build-debug'
 let g:ctrlp_max_depth = 20
 let g:ctrlp_show_hidden = 1
-
-" command-t
-nmap <silent> <Leader>tt <Plug>(CommandT)
-nmap <silent> <Leader>tb <Plug>(CommandTBuffer)
-nmap <silent> <Leader>tj <Plug>(CommandTJump)
-let g:CommandTWildIgnore = &wildignore
 
 inoremap <C-Space> <C-x><c-o>
 
@@ -424,7 +412,7 @@ let g:airline_theme = 'onedark'
 let g:delimitMate_expand_cr = 2
 let g:delimitMate_expand_space = 1
 let g:delimitMate_balance_matchpairs = 1
-let g:delimitMate_jump_expansion = 1
+" let g:delimitMate_jump_expansion = 1
 
 " Make VIM remember position in file after reopen
 if has('autocmd')
@@ -473,9 +461,6 @@ nmap <silent> <c-j> <Plug>(ale_next_wrap)
 " rainbow
 let g:rainbow_active = 1
 
-" dirvish
-" nmap <Leader>v <Plug>(dirvish_up)
-
 " vim-anzu
 nmap n <Plug>(anzu-n-with-echo)
 nmap N <plug>(anzu-N-with-echo)
@@ -484,9 +469,6 @@ nmap # <Plug>(anzu-sharp-with-echo)
 nmap g* g*<Plug>(anzu-update-search-status-with-echo)
 nmap g# g#<Plug>(anzu-update-search-status-with-echo)
 nmap <Esc><Esc> <Plug>(anzu-clear-search-status)
-
-" vim-troll-stopper
-" highlight TrollStopper ctermbg=blue guibg=#FF00AA
 
 " incsearch.vim
 map <Leader>/ <Plug>(incsearch-forward)
@@ -517,7 +499,7 @@ let g:TerminusInsertCursorShape = 1  " bar
 let g:TerminusNormalCursorShape = 0 " block
 
 " fzf
-nnoremap <Leader>f :FZF<CR>
+nnoremap <c-f> :FZF<CR>
 let g:fzf_action = {
       \ 'ctrl-t': 'tab split',
       \ 'ctrl-x': 'split',
