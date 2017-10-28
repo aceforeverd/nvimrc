@@ -1,16 +1,18 @@
 #/bin/bash
 
+INIT=https://raw.githubusercontent.com/aceforeverd/nvimrc/master/init.vim
 VIMPLUG=https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 DEIN=https://github.com/Shougo/dein.vim.git
-VIMPLUG_PATH=$HOME/.config/nvim/autoload
+CONFIG_PATH=$HOME/.config/nvim
 DEIN_PATH=~/.config/nvim/dein.vim/repos/github.com/Shougo/dein.vim
-NVIMRC=$HOME/.config/nvim/init.vim
+NVIMRC=$CONFIG_PATH/init.vim
 
-if [ ! -d "$VIMPLUG_PATH" ] ; then
-    mkdir -p "$VIMPLUG_PATH"
+if [ ! -d "$VIMPLUG_PATH/autoload" ] ; then
+    mkdir -p "$VIMPLUG_PATH/autoload"
 fi
 
-wget $VIMPLUG -O "$VIMPLUG_PATH/plug.vim"
+wget $VIMPLUG -O "$VIMPLUG_PATH/autoload/plug.vim"
+
 
 if [ ! -d "$DEIN_PATH" ] ; then
     mkdir -p "$DEIN_PATH"
@@ -18,9 +20,15 @@ fi
 
 git clone "$DEIN" "$DEIN_PATH"
 
+
 cd "$(dirname "$0")" || exit 1
+wget $(INIT) -O init.nvim
 
 if [ -f "$NVIMRC" ] ; then
-    mv "$NVIMRC" "$HOME/.config/nvim/init-bak.vim"
+    if [ $(diff init.nvim "$NVIMRC") ] ; then
+        mv "$NVIMRC" "$CONFIG_PATH/init-bak.vim"
+        mv init.nvim "$NVIMRC"
+    fi
 fi
-cp init.vim "$NVIMRC"
+
+echo -e "installation done, execute ':call dein#install()' in nvim to install plugins"

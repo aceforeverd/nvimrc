@@ -130,6 +130,7 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('vim-utils/vim-man')
     " strange highlights on fzf Helptags
     " call dein#add('vim-utils/vim-troll-stopper')
+
     " comment
     call dein#add('tpope/vim-commentary')
 
@@ -255,6 +256,8 @@ autocmd TabLeave * let g:lasttab = tabpagenr()
 " undo history
 set undodir=~/.config/nvim/undodir/
 set undofile
+
+command! HelptagsGen :call pathogen#helptags()
 
 " filetype
 autocmd BufRead,BufNewFile *.ts setlocal filetype=typescript
