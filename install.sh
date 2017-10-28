@@ -7,11 +7,11 @@ CONFIG_PATH=$HOME/.config/nvim
 DEIN_PATH=~/.config/nvim/dein.vim/repos/github.com/Shougo/dein.vim
 NVIMRC=$CONFIG_PATH/init.vim
 
-if [ ! -d "$VIMPLUG_PATH/autoload" ] ; then
-    mkdir -p "$VIMPLUG_PATH/autoload"
+if [ ! -d "$CONFIG_PATH/autoload" ] ; then
+    mkdir -p "$CONFIG_PATH/autoload"
 fi
 
-wget $VIMPLUG -O "$VIMPLUG_PATH/autoload/plug.vim"
+wget $VIMPLUG -O "$CONFIG_PATH/autoload/plug.vim"
 
 
 if [ ! -d "$DEIN_PATH" ] ; then
@@ -22,7 +22,7 @@ git clone "$DEIN" "$DEIN_PATH"
 
 
 cd "$(dirname "$0")" || exit 1
-wget $(INIT) -O init.nvim
+wget $INIT -O init.nvim
 
 if [ -f "$NVIMRC" ] ; then
     if [ $(diff init.nvim "$NVIMRC") ] ; then
