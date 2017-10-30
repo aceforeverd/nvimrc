@@ -28,6 +28,8 @@ if [ -f "$NVIMRC" ] ; then
     if [ $(diff init.nvim "$NVIMRC") ] ; then
         mv "$NVIMRC" "$CONFIG_PATH/init-bak.vim"
         mv init.nvim "$NVIMRC"
+    else
+        rm init.nvim
     fi
 fi
 

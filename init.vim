@@ -127,9 +127,6 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('tpope/vim-repeat')
     call dein#add('tpope/vim-unimpaired')
     call dein#add('tpope/vim-dispatch')
-    call dein#add('vim-utils/vim-man')
-    " strange highlights on fzf Helptags
-    " call dein#add('vim-utils/vim-troll-stopper')
 
     " comment
     call dein#add('tpope/vim-commentary')
@@ -188,7 +185,6 @@ endif
 
 call plug#begin('~/.config/nvim/vimplug')
 
-
 call plug#end()
 
 " Required:
@@ -204,11 +200,6 @@ set number
 set background=dark
 
 if (empty($TMUX))
-    " outside tmux
-    if (has('nvim'))
-        let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-    endif
-
     if (has('termguicolors'))
         set termguicolors
     endif
@@ -232,7 +223,7 @@ set smartcase
 set incsearch
 set ignorecase
 
-let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 1
+" let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 1
 set wildignore=*.o,*~,*.pyc,*/.git/*,*/.svn/*,*/node_modules/*,*/.idea/*,*/.DS_Store
 
 " maps
@@ -257,6 +248,7 @@ autocmd TabLeave * let g:lasttab = tabpagenr()
 set undodir=~/.config/nvim/undodir/
 set undofile
 
+command! Helptags :call fzf#vim#helptags(<bang>0)
 command! HelptagsGen :call pathogen#helptags()
 
 " filetype
@@ -456,8 +448,8 @@ let g:ale_linters = {
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
-let g:ale_sign_error = ':P'
-let g:ale_sign_warning = ':('
+let g:ale_sign_error = ':('
+let g:ale_sign_warning = ':P'
 nmap <silent> <c-k> <Plug>(ale_previous_wrap)
 nmap <silent> <c-j> <Plug>(ale_next_wrap)
 
