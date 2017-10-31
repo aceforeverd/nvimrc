@@ -169,7 +169,6 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('tiagofumo/vim-nerdtree-syntax-highlight')
     call dein#add('itchyny/calendar.vim')
     call dein#add('mhinz/vim-startify')
-    call dein#add('kshenoy/vim-signature')
     call dein#add('vim-airline/vim-airline')
     call dein#add('vim-airline/vim-airline-themes')
     call dein#add('flazz/vim-colorschemes')
@@ -177,6 +176,7 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('wincent/terminus')
     call dein#add('ntpeters/vim-better-whitespace')
     call dein#add('junegunn/rainbow_parentheses.vim')
+    call dein#add('MattesGroeger/vim-bookmarks')
 
     " Required:
     call dein#end()
@@ -416,31 +416,6 @@ endif
 " vim-markdown
 let g:vim_markdown_folding_disabled = 1
 
-" vim-signature
-let g:SignatureMap = {
-        \ 'Leader'             :  '<Leader>m',
-        \ 'PlaceNextMark'      :  '<Leader>m,',
-        \ 'ToggleMarkAtLine'   :  '<Leader>m.',
-        \ 'PurgeMarksAtLine'   :  '<Leader>m-',
-        \ 'DeleteMark'         :  '<Leader>dm',
-        \ 'PurgeMarks'         :  '<Leader>m<Space>',
-        \ 'PurgeMarkers'       :  '<Leader>m<BS>',
-        \ 'GotoNextLineAlpha'  :  '',
-        \ 'GotoPrevLineAlpha'  :  '',
-        \ 'GotoNextSpotAlpha'  :  '',
-        \ 'GotoPrevSpotAlpha'  :  '',
-        \ 'GotoNextLineByPos'  :  '',
-        \ 'GotoPrevLineByPos'  :  '',
-        \ 'GotoNextSpotByPos'  :  '',
-        \ 'GotoPrevSpotByPos'  :  '',
-        \ 'GotoNextMarker'     :  '',
-        \ 'GotoPrevMarker'     :  '',
-        \ 'GotoNextMarkerAny'  :  '',
-        \ 'GotoPrevMarkerAny'  :  '',
-        \ 'ListBufferMarks'    :  '',
-        \ 'ListBufferMarkers'  :  ''
-        \ }
-
 " Ale
 let g:ale_linters = {
             \ }
@@ -501,3 +476,6 @@ augroup rainbow_lisp
   autocmd!
   autocmd FileType lisp,clojure,scheme RainbowParentheses
 augroup END
+
+" vim-bookmarks
+let g:bookmark_no_default_key_mappings = 1
