@@ -174,9 +174,9 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('vim-airline/vim-airline-themes')
     call dein#add('flazz/vim-colorschemes')
     call dein#add('majutsushi/tagbar')
-    call dein#add('luochen1990/rainbow')
     call dein#add('wincent/terminus')
     call dein#add('ntpeters/vim-better-whitespace')
+    call dein#add('junegunn/rainbow_parentheses.vim')
 
     " Required:
     call dein#end()
@@ -184,7 +184,6 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
 endif
 
 call plug#begin('~/.config/nvim/vimplug')
-
 call plug#end()
 
 " Required:
@@ -453,9 +452,6 @@ let g:ale_sign_warning = ':P'
 nmap <silent> <c-k> <Plug>(ale_previous_wrap)
 nmap <silent> <c-j> <Plug>(ale_next_wrap)
 
-" rainbow
-let g:rainbow_active = 1
-
 " vim-anzu
 nmap n <Plug>(anzu-n-with-echo)
 nmap N <plug>(anzu-N-with-echo)
@@ -499,3 +495,9 @@ let g:fzf_action = {
       \ 'ctrl-t': 'tab split',
       \ 'ctrl-x': 'split',
       \ 'ctrl-v': 'vsplit' }
+
+" rainbow
+augroup rainbow_lisp
+  autocmd!
+  autocmd FileType lisp,clojure,scheme RainbowParentheses
+augroup END
