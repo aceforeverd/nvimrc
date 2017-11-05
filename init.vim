@@ -28,7 +28,6 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('Shougo/vinarise.vim')
     call dein#add('Shougo/echodoc.vim')
     call dein#add('ujihisa/neco-look')
-    call dein#add('hrsh7th/vim-neco-calc')
 
     " vim
     call dein#add('Shougo/neco-vim')
@@ -149,6 +148,11 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     " motion
     call dein#add('easymotion/vim-easymotion')
     call dein#add('rhysd/clever-f.vim')
+    call dein#add('haya14busa/incsearch.vim')
+    call dein#add('haya14busa/is.vim')
+    " call dein#add('osyo-manga/vim-anzu')
+    call dein#add('google/vim-searchindex')
+    call dein#add('haya14busa/vim-asterisk')
     " search
     call dein#add('junegunn/fzf', {
                 \ 'path': $HOME . '/.fzf',
@@ -156,11 +160,10 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
                 \ 'merged': 0
                 \ })
     call dein#add('junegunn/fzf.vim')
+    call dein#add('fszymanski/fzf-gitignore')
     call dein#add('mhinz/vim-grepper')
     call dein#add('ctrlpvim/ctrlp.vim')
     call dein#add('dyng/ctrlsf.vim')
-    call dein#add('osyo-manga/vim-anzu')
-    call dein#add('haya14busa/incsearch.vim')
     call dein#add('brooth/far.vim')
     call dein#add('wincent/ferret')
 
@@ -222,7 +225,15 @@ set smartcase
 set incsearch
 set ignorecase
 
-" let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 1
+" cursor shape
+set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
+		\,a:blinkwait700-blinkoff400-blinkon250-Cursor/lCursor
+		\,sm:block-blinkwait175-blinkoff150-blinkon175
+augroup cursor_shape
+    autocmd!
+    autocmd VimLeave * set guicursor=a:hor25-blinkon300
+augroup END
+
 set wildignore=*.o,*~,*.pyc,*/.git/*,*/.svn/*,*/node_modules/*,*/.idea/*,*/.DS_Store
 
 " maps
@@ -427,19 +438,12 @@ let g:ale_sign_warning = ':P'
 nmap <silent> <c-k> <Plug>(ale_previous_wrap)
 nmap <silent> <c-j> <Plug>(ale_next_wrap)
 
-" vim-anzu
-nmap n <Plug>(anzu-n-with-echo)
-nmap N <plug>(anzu-N-with-echo)
-nmap * <Plug>(anzu-star-with-echo)
-nmap # <Plug>(anzu-sharp-with-echo)
-nmap g* g*<Plug>(anzu-update-search-status-with-echo)
-nmap g# g#<Plug>(anzu-update-search-status-with-echo)
-nmap <Esc><Esc> <Plug>(anzu-clear-search-status)
-
 " incsearch.vim
-map <Leader>/ <Plug>(incsearch-forward)
-map <Leader>? <Plug>(incsearch-backward)
-map <Leader>g/ <Plug>(incsearch-stay)
+let g:searchindex_improved_star = 0
+map / <Plug>(incsearch-forward)
+map ? <Plug>(incsearch-backward)
+map g/ <Plug>(incsearch-stay)
+map * <Plug>(asterisk-*)
 
 " easy-align
 " Start interactive EasyAlign in visual mode (e.g. vip<Enter>)
