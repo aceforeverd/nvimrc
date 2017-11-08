@@ -41,6 +41,7 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
                 \ 'build': 'make',
                 \ 'on_ft': 'go'
                 \ })
+    call dein#add('jodosha/vim-godebug')
     " typescript
     call dein#add('HerringtonDarkholme/yats.vim')
     call dein#add('mhartington/nvim-typescript')
@@ -83,6 +84,7 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     " markdown
     call dein#add('plasticboy/vim-markdown')
     call dein#add('euclio/vim-markdown-composer', {
+                \ 'on_if': 'executable("cargo")',
                 \ 'build': 'cargo build --release'
                 \ })
     " Language tool
@@ -104,7 +106,9 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('chrisbra/SudoEdit.vim')
     " test/debug
     call dein#add('janko-m/vim-test')
-    call dein#add('dbgx/lldb.nvim')
+    call dein#add('dbgx/lldb.nvim', {
+                \ 'on_if': executable('lldb')
+                \ })
     " format
     call dein#add('sbdchd/neoformat')
     call dein#add('rhysd/vim-clang-format')
@@ -150,8 +154,7 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('rhysd/clever-f.vim')
     call dein#add('haya14busa/incsearch.vim')
     call dein#add('haya14busa/is.vim')
-    " call dein#add('osyo-manga/vim-anzu')
-    call dein#add('google/vim-searchindex')
+    call dein#add('osyo-manga/vim-anzu')
     call dein#add('haya14busa/vim-asterisk')
     " search
     call dein#add('junegunn/fzf', {
@@ -208,7 +211,7 @@ if (empty($TMUX))
     colorscheme colorsbox-material
 else
     set notermguicolors
-    colorscheme torte
+    colorscheme colorsbox-material
 endif
 
 set autoindent
@@ -320,6 +323,7 @@ endif
 if !exists('g:deoplete#ignore_sources')
     let g:deoplete#ignore_sources = {}
 endif
+let g:deoplete#ignore_sources.c = 'look'
 let g:deoplete#ignore_sources.cpp = 'look'
 
 " =========================== end of deoplete =============================================
@@ -439,11 +443,12 @@ nmap <silent> <c-k> <Plug>(ale_previous_wrap)
 nmap <silent> <c-j> <Plug>(ale_next_wrap)
 
 " incsearch.vim
-let g:searchindex_improved_star = 0
-map / <Plug>(incsearch-forward)
-map ? <Plug>(incsearch-backward)
-map g/ <Plug>(incsearch-stay)
-map * <Plug>(asterisk-*)
+nmap n <Plug>(anzu-n-with-echo)
+nmap N <Plug>(anzu-N-with-echo)
+map <Leader>/ <Plug>(incsearch-forward)
+map <Leader>? <Plug>(incsearch-backward)
+map <Leader>g/ <Plug>(incsearch-stay)
+" map * <Plug>(asterisk-*)
 
 " easy-align
 " Start interactive EasyAlign in visual mode (e.g. vip<Enter>)
@@ -461,6 +466,8 @@ let g:cpp_concepts_highlight = 1
 let g:startify_skiplist = [
       \ '/tmp',
       \ '/usr/share/nvim/runtime/doc',
+      \ '/usr/local/share/nvim/runtime/doc',
+      \ $HOME . '/.config/nvim/dein.vim/.cache/init.vim/.dein/doc',
       \ ]
 
 " terminus
