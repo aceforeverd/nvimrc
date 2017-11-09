@@ -263,6 +263,11 @@ set undofile
 
 command! Helptags :call fzf#vim#helptags(<bang>0)
 command! HelptagsGen :call pathogen#helptags()
+command! -bang -nargs=* Rg call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --hidden --follow --glob "!.git/*" --color=always '.shellescape(<q-args>), 1, <bang>0)
+
+if executable('rg')
+    set grepprg=rg\ --vimgrep
+endif
 
 " filetype
 autocmd BufRead,BufNewFile *.ts setlocal filetype=typescript
