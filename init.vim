@@ -257,10 +257,17 @@ nnoremap <Leader>te :tabedit <c-r>=expand("%:p:h")<cr>/
 let g:lasttab = 1
 nnoremap <Leader>ts :exe "tabn ".g:lasttab<CR>
 autocmd TabLeave * let g:lasttab = tabpagenr()
+
 " undo history
 set undodir=~/.config/nvim/undodir/
 set undofile
 
+" fzf
+nnoremap <c-q> :FZF<CR>
+let g:fzf_action = {
+      \ 'ctrl-x': 'tab split',
+      \ 'ctrl-s': 'split',
+      \ 'ctrl-v': 'vsplit' }
 command! Helptags :call fzf#vim#helptags(<bang>0)
 command! HelptagsGen :call pathogen#helptags()
 command! -bang -nargs=* Rg call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --hidden --follow --glob "!.git/*" --color=always '.shellescape(<q-args>), 1, <bang>0)
@@ -332,6 +339,11 @@ let g:deoplete#ignore_sources.c = 'look'
 let g:deoplete#ignore_sources.cpp = 'look'
 
 " =========================== end of deoplete =============================================
+
+" clang_complete
+let g:clang_complete_macros = 1
+let g:clang_complete_patterns = 1
+
 
 " neco-ghc
 autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
@@ -480,12 +492,6 @@ let g:TerminusCursorShape = 1
 let g:TerminusInsertCursorShape = 1  " bar
 let g:TerminusNormalCursorShape = 0 " block
 
-" fzf
-nnoremap <c-f> :FZF<CR>
-let g:fzf_action = {
-      \ 'ctrl-t': 'tab split',
-      \ 'ctrl-x': 'split',
-      \ 'ctrl-v': 'vsplit' }
 
 " rainbow
 augroup rainbow_lisp
