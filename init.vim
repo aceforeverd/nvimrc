@@ -149,11 +149,11 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('tommcdo/vim-exchange')
     call dein#add('matze/vim-move')
     call dein#add('terryma/vim-multiple-cursors')
+    call dein#add('brooth/far.vim')
     " motion
     call dein#add('easymotion/vim-easymotion')
     call dein#add('rhysd/clever-f.vim')
     call dein#add('haya14busa/incsearch.vim')
-    call dein#add('haya14busa/is.vim')
     call dein#add('osyo-manga/vim-anzu')
     call dein#add('haya14busa/vim-asterisk')
     " search
@@ -165,9 +165,7 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('junegunn/fzf.vim')
     call dein#add('fszymanski/fzf-gitignore')
     call dein#add('mhinz/vim-grepper')
-    call dein#add('ctrlpvim/ctrlp.vim')
     call dein#add('dyng/ctrlsf.vim')
-    call dein#add('brooth/far.vim')
     call dein#add('wincent/ferret')
 
     " interface
@@ -419,14 +417,6 @@ xmap <Leader>e <Plug>(neosnippet_expand_or_jump)>
 " editorconfig
 let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://*']
 
-" ctrlp
-let g:ctrlp_working_path_mode = 'rw'
-let g:ctrlp_map = '<c-p>'
-let g:ctrlp_max_height = 20
-let g:ctrlp_custom_ignore = '^node_modules\|^\.DS_Store\|^\.git\|^\.coffee\|cmake-build-debug'
-let g:ctrlp_max_depth = 20
-let g:ctrlp_show_hidden = 1
-
 inoremap <C-Space> <C-x><c-o>
 
 " airline
@@ -486,12 +476,6 @@ let g:startify_skiplist = [
       \ '/usr/local/share/nvim/runtime/doc',
       \ $HOME . '/.config/nvim/dein.vim/.cache/init.vim/.dein/doc',
       \ ]
-
-" terminus
-let g:TerminusCursorShape = 1
-let g:TerminusInsertCursorShape = 1  " bar
-let g:TerminusNormalCursorShape = 0 " block
-
 
 " rainbow
 augroup rainbow_lisp
