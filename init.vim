@@ -16,6 +16,8 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add($HOME . '/.config/nvim/dein.vim/repos/github.com/Shougo/dein.vim')
 
     call dein#add('Shougo/deoplete.nvim')
+    call dein#add('Shougo/unite.vim')
+    call dein#add('Shougo/vimfiler.vim')
     call dein#add('Shougo/neosnippet.vim')
     call dein#add('Shougo/neosnippet-snippets')
     call dein#add('Shougo/denite.nvim')
@@ -64,6 +66,8 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('hkupty/iron.nvim')
     " java
     call dein#add('artur-shaik/vim-javacomplete2')
+    " rails
+    call dein#add('tpope/vim-rails')
     " zsh
     call dein#add('zchee/deoplete-zsh')
     " R
@@ -82,7 +86,7 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     " csv
     call dein#add('chrisbra/csv.vim')
     " markdown
-    call dein#add('plasticboy/vim-markdown')
+    call dein#add('tpope/vim-markdown')
     call dein#add('euclio/vim-markdown-composer', {
                 \ 'on_if': 'executable("cargo")',
                 \ 'build': 'cargo build --release'
@@ -101,9 +105,10 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('w0rp/ale')
     call dein#add('tpope/vim-sensible')
     call dein#add('tpope/vim-pathogen')
+    call dein#add('tpope/vim-eunuch')
     call dein#add('haya14busa/dein-command.vim')
     call dein#add('editorconfig/editorconfig-vim')
-    call dein#add('chrisbra/SudoEdit.vim')
+    call dein#add('tpope/vim-projectionist')
     " test/debug
     call dein#add('janko-m/vim-test')
     call dein#add('dbgx/lldb.nvim', {
@@ -169,8 +174,6 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('wincent/ferret')
 
     " interface
-    call dein#add('scrooloose/nerdtree')
-    call dein#add('tiagofumo/vim-nerdtree-syntax-highlight')
     call dein#add('itchyny/calendar.vim')
     call dein#add('mhinz/vim-startify')
     call dein#add('vim-airline/vim-airline')
@@ -276,6 +279,10 @@ endif
 
 " filetype
 autocmd BufRead,BufNewFile *.ts setlocal filetype=typescript
+
+" vimfiler
+let g:vimfiler_as_default_explorer = 1
+let g:vimfiler_ignore_pattern = ['^\.', '\.o$']
 
 " echodoc
 set cmdheight=2
@@ -485,3 +492,4 @@ augroup END
 
 " vim-bookmarks
 let g:bookmark_no_default_key_mappings = 1
+
