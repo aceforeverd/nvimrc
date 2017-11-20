@@ -35,7 +35,6 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('Shougo/neco-vim')
     " c/c++
     call dein#add('octol/vim-cpp-enhanced-highlight')
-    call dein#add('nacitar/a.vim')
     call dein#add('Rip-Rip/clang_complete')
     " go
     call dein#add('fatih/vim-go')
@@ -112,7 +111,7 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     " test/debug
     call dein#add('janko-m/vim-test')
     call dein#add('dbgx/lldb.nvim', {
-                \ 'on_if': executable('lldb')
+                \ 'on_if': 'executable("lldb")'
                 \ })
     " format
     call dein#add('sbdchd/neoformat')
@@ -184,6 +183,7 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('ntpeters/vim-better-whitespace')
     call dein#add('junegunn/rainbow_parentheses.vim')
     call dein#add('MattesGroeger/vim-bookmarks')
+    call dein#add('ryanoasis/vim-devicons')
 
     " Required:
     call dein#end()
@@ -205,15 +205,8 @@ syntax enable
 set number
 set background=dark
 
-if (empty($TMUX))
-    if (has('termguicolors'))
-        set termguicolors
-    endif
-    colorscheme colorsbox-material
-else
-    set notermguicolors
-    colorscheme colorsbox-material
-endif
+set termguicolors
+colorscheme onedark
 
 set autoindent
 set smartindent
@@ -264,25 +257,45 @@ set undodir=~/.config/nvim/undodir/
 set undofile
 
 " fzf
-nnoremap <c-q> :FZF<CR>
+nnoremap <c-p> :FZF<CR>
 let g:fzf_action = {
       \ 'ctrl-x': 'tab split',
       \ 'ctrl-s': 'split',
       \ 'ctrl-v': 'vsplit' }
 command! Helptags :call fzf#vim#helptags(<bang>0)
 command! HelptagsGen :call pathogen#helptags()
+command! -bang -nargs=* Ag
+      \ call fzf#vim#ag(<q-args>,
+      \                 <bang>0 ? fzf#vim#with_preview('up:60%')
+      \                         : fzf#vim#with_preview('right:50%:hidden', '?'),
+      \                 <bang>0)
 command! -bang -nargs=* Rg call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --hidden --follow --glob "!.git/*" --color=always '.shellescape(<q-args>), 1, <bang>0)
 
 if executable('rg')
     set grepprg=rg\ --vimgrep
 endif
+nmap <Leader><Tab> <plug>(fzf-maps-n)
+imap <Leader><Tab> <plug>(fzf-maps-i)
+xmap <Leader><Tab> <plug>(fzf-maps-x)
+omap <Leader><Tab> <plug>(fzf-maps-o)
 
-" filetype
+" filetypes
 autocmd BufRead,BufNewFile *.ts setlocal filetype=typescript
+autocmd BufRead,BufNewFile *.h setlocal  filetype=c
 
 " vimfiler
+call vimfiler#set_execute_file('vim', ['vim', 'nvim'])
+
 let g:vimfiler_as_default_explorer = 1
 let g:vimfiler_ignore_pattern = ['^\.', '\.o$']
+let g:vimfiler_tree_opened_icon = '▾'
+let g:vimfiler_tree_closed_icon = '▸'
+let g:vimfiler_marked_file_icon = '*'
+
+call vimfiler#custom#profile('default', 'context', {
+            \ 'safe' : 0,
+            \ 'edit_action' : 'tabopen',
+            \ })
 
 " echodoc
 set cmdheight=2
@@ -300,11 +313,14 @@ inoremap <expr><BS> pumvisible() ? deoplete#smart_close_popup()."\<C-h>" :
             \ delimitMate#BS()
 
 " <CR>: close popup and save indent.
-"inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+" inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+" inoremap <expr> <CR> delimitMate#WithinEmptyPair() ?
+"              \ <Plug>delimitMateCR :
+"              \ <CR>
+
 function! s:my_cr_function() abort
     return deoplete#close_popup() . "\<CR>"
 endfunction
-
 
 " Tab complete
 inoremap <silent><expr> <TAB>
@@ -430,6 +446,7 @@ inoremap <C-Space> <C-x><c-o>
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#ale#enabled = 1
 let g:airline_theme = 'onedark'
+let g:airline_powerline_fonts = 1
 
 " delimitMate
 let g:delimitMate_expand_cr = 2
