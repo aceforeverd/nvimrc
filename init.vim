@@ -58,7 +58,6 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('slashmili/alchemist.vim')
     " clojure
     call dein#add('clojure-vim/async-clj-omni')
-    call dein#add('clojure-vim/acid.nvim')
     call dein#add('tpope/vim-fireplace')
     call dein#add('clojure-vim/vim-cider')
     " Repl
@@ -71,6 +70,8 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('zchee/deoplete-zsh')
     " R
     call dein#add('jalvesaq/Nvim-R')
+    " ruby
+    call dein#add('Shougo/deoplete-rct')
     " glsl
     call dein#add('tikhomirov/vim-glsl')
     " haskell
@@ -159,7 +160,6 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('rhysd/clever-f.vim')
     call dein#add('haya14busa/incsearch.vim')
     call dein#add('osyo-manga/vim-anzu')
-    call dein#add('haya14busa/vim-asterisk')
     " search
     call dein#add('junegunn/fzf', {
                 \ 'path': $HOME . '/.fzf',
@@ -168,7 +168,6 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
                 \ })
     call dein#add('junegunn/fzf.vim')
     call dein#add('fszymanski/fzf-gitignore')
-    call dein#add('mhinz/vim-grepper')
     call dein#add('dyng/ctrlsf.vim')
     call dein#add('wincent/ferret')
 
@@ -191,9 +190,12 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
 endif
 
 call plug#begin('~/.config/nvim/vimplug')
+Plug 'clojure-vim/nvim-parinfer.js'
+Plug 'jsfaint/gen_tags.vim'
+" Plug 'clojure-vim/acid.nvim'
+" Plug 'c0r73x/neotags.nvim'
 call plug#end()
 
-" Required:
 filetype plugin indent on
 syntax enable
 
@@ -221,6 +223,7 @@ set hlsearch
 set smartcase
 set incsearch
 set ignorecase
+set hidden
 
 " cursor shape
 set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
@@ -271,13 +274,17 @@ command! -bang -nargs=* Ag
       \                 <bang>0)
 command! -bang -nargs=* Rg call fzf#vim#grep('rg --column --line-number --no-heading --fixed-strings --ignore-case --hidden --follow --glob "!.git/*" --color=always '.shellescape(<q-args>), 1, <bang>0)
 
-if executable('rg')
-    set grepprg=rg\ --vimgrep
-endif
 nmap <Leader><Tab> <plug>(fzf-maps-n)
 imap <Leader><Tab> <plug>(fzf-maps-i)
 xmap <Leader><Tab> <plug>(fzf-maps-x)
 omap <Leader><Tab> <plug>(fzf-maps-o)
+if executable('rg')
+    set grepprg=rg\ --vimgrep
+endif
+
+" ferret
+let g:FerretMap = 0
+let g:FerretNvim = 1
 
 " filetypes
 autocmd BufRead,BufNewFile *.ts setlocal filetype=typescript
@@ -291,6 +298,9 @@ let g:vimfiler_ignore_pattern = ['^\.', '\.o$']
 let g:vimfiler_tree_opened_icon = '▾'
 let g:vimfiler_tree_closed_icon = '▸'
 let g:vimfiler_marked_file_icon = '*'
+
+" signify
+let g:signify_sign_change = '~'
 
 call vimfiler#custom#profile('default', 'context', {
             \ 'safe' : 0,
@@ -468,8 +478,9 @@ let g:ale_linters = {
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
 let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
-let g:ale_sign_error = ':('
-let g:ale_sign_warning = ':P'
+let g:ale_sign_error = '✖'
+let g:ale_sign_warning = '⚠'
+let g:ale_sign_info = 'ℹ'
 nmap <silent> <c-k> <Plug>(ale_previous_wrap)
 nmap <silent> <c-j> <Plug>(ale_next_wrap)
 
