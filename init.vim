@@ -48,6 +48,7 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('mhartington/nvim-typescript')
     " python
     call dein#add('zchee/deoplete-jedi')
+    call dein#add('davidhalter/jedi-vim')
     " rust
     call dein#add('sebastianmarkow/deoplete-rust')
     " php
@@ -445,6 +446,13 @@ let g:deoplete#sources#ternjs#filetypes = [
 " clojure
 let g:deoplete#keyword_patterns = {}
 let g:deoplete#keyword_patterns.clojure = '[\w!$%&*+/:<=>?@\^_~\-\.#]*'
+
+" jedi
+let g:jedi#completions_enabled = 0
+let g:jedi#auto_vim_configuration = 0
+let g:jedi#smart_auto_mappings = 0
+let g:jedi#use_tabs_not_buffers = 'winwidth'
+let g:jedi#usages_command = '<Leader>nn'
 
 " neosnippet
 imap <Leader>e <Plug>(neosnippet_expand_or_jump)
