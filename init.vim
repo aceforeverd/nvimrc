@@ -96,7 +96,7 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('autozimu/LanguageClient-neovim')
     " tmux
     call dein#add('benmills/vimux')
-    call dein#add('christoomey/vim-tmux-navigator', {'on_if': '!empty($TMUX)'})
+    call dein#add('christoomey/vim-tmux-navigator')
     call dein#add('tmux-plugins/vim-tmux')
     " gentoo portage syntax
     call dein#add('gentoo/gentoo-syntax')
@@ -191,7 +191,10 @@ endif
 
 call plug#begin('~/.config/nvim/vimplug')
 Plug 'clojure-vim/nvim-parinfer.js'
-Plug 'jsfaint/gen_tags.vim'
+if executable('gtags')
+    Plug 'jsfaint/gen_tags.vim'
+endif
+Plug 'wellle/tmux-complete.vim'
 " Plug 'clojure-vim/acid.nvim'
 " Plug 'c0r73x/neotags.nvim'
 call plug#end()
@@ -262,8 +265,8 @@ set undofile
 " fzf
 nnoremap <c-p> :FZF<CR>
 let g:fzf_action = {
-      \ 'ctrl-x': 'tab split',
-      \ 'ctrl-s': 'split',
+      \ 'ctrl-a': 'tab split',
+      \ 'ctrl-x': 'split',
       \ 'ctrl-v': 'vsplit' }
 command! Helptags :call fzf#vim#helptags(<bang>0)
 command! HelptagsGen :call pathogen#helptags()
@@ -289,6 +292,7 @@ let g:FerretNvim = 1
 " filetypes
 autocmd BufRead,BufNewFile *.ts setlocal filetype=typescript
 autocmd BufRead,BufNewFile *.h setlocal  filetype=c
+autocmd BufRead,BufNewFile *.verilog,*.vlg setlocal  filetype=verilog
 
 " vimfiler
 call vimfiler#set_execute_file('vim', ['vim', 'nvim'])
@@ -444,8 +448,8 @@ let g:deoplete#keyword_patterns.clojure = '[\w!$%&*+/:<=>?@\^_~\-\.#]*'
 
 " neosnippet
 imap <Leader>e <Plug>(neosnippet_expand_or_jump)
-smap <Leader>e <Plug>(neosnippet_expand_or_jump)>
-xmap <Leader>e <Plug>(neosnippet_expand_or_jump)>
+smap <Leader>e <Plug>(neosnippet_expand_or_jump)
+xmap <Leader>e <Plug>(neosnippet_expand_target)
 
 " editorconfig
 let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://*']
@@ -521,3 +525,8 @@ augroup END
 " vim-bookmarks
 let g:bookmark_no_default_key_mappings = 1
 
+" tmux-navigator
+let g:tmux_navigator_no_mappings = 1
+
+" tmux-complete
+let g:tmuxcomplete#trigger = ''
