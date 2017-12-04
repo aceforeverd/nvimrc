@@ -2,7 +2,6 @@ if &compatible
     set nocompatible
 endif
 
-" Required:
 set runtimepath+=$HOME/.config/nvim/dein.vim/repos/github.com/Shougo/dein.vim
 
 let g:dein#install_process_timeout = 180
@@ -12,7 +11,6 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#begin($HOME . '/.config/nvim/dein.vim')
 
     " Let dein manage dein
-    " Required:
     call dein#add($HOME . '/.config/nvim/dein.vim/repos/github.com/Shougo/dein.vim')
 
     call dein#add('Shougo/deoplete.nvim')
@@ -43,6 +41,12 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
                 \ 'on_ft': 'go'
                 \ })
     call dein#add('jodosha/vim-godebug')
+    " javascript
+    call dein#add('othree/yajs.vim')
+    call dein#add('othree/es.next.syntax.vim', {'merged': 0})
+    call dein#add('othree/javascript-libraries-syntax.vim')
+    call dein#add('ternjs/tern_for_vim')
+    call dein#add('carlitux/deoplete-ternjs')
     " typescript
     call dein#add('HerringtonDarkholme/yats.vim')
     call dein#add('mhartington/nvim-typescript')
@@ -50,11 +54,13 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('zchee/deoplete-jedi')
     call dein#add('davidhalter/jedi-vim')
     " rust
+    call dein#add('rust-lang/rust.vim')
+    call dein#add('racer-rust/vim-racer')
     call dein#add('sebastianmarkow/deoplete-rust')
     " php
-    call dein#add('shawncplus/phpcomplete.vim')
-    " javascript
-    call dein#add('carlitux/deoplete-ternjs')
+    call dein#add('roxma/LanguageServer-php-neovim', {
+                \ 'build': 'composer install && composer run-script parse-stubs'
+                \ })
     " elixir
     call dein#add('slashmili/alchemist.vim')
     " clojure
@@ -89,7 +95,6 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     " markdown
     call dein#add('tpope/vim-markdown')
     call dein#add('euclio/vim-markdown-composer', {
-                \ 'on_if': 'executable("cargo")',
                 \ 'build': 'cargo build --release'
                 \ })
     " Language tool
@@ -170,7 +175,6 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('junegunn/fzf.vim')
     call dein#add('fszymanski/fzf-gitignore')
     call dein#add('dyng/ctrlsf.vim')
-    call dein#add('wincent/ferret')
 
     " interface
     call dein#add('itchyny/calendar.vim')
@@ -191,7 +195,7 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
 endif
 
 call plug#begin('~/.config/nvim/vimplug')
-Plug 'clojure-vim/nvim-parinfer.js'
+" Plug 'clojure-vim/nvim-parinfer.js'
 if executable('gtags')
     Plug 'jsfaint/gen_tags.vim'
 endif
@@ -291,7 +295,6 @@ let g:FerretMap = 0
 let g:FerretNvim = 1
 
 " filetypes
-autocmd BufRead,BufNewFile *.ts setlocal filetype=typescript
 autocmd BufRead,BufNewFile *.h setlocal  filetype=c
 autocmd BufRead,BufNewFile *.verilog,*.vlg setlocal  filetype=verilog
 
@@ -311,6 +314,27 @@ call vimfiler#custom#profile('default', 'context', {
             \ 'safe' : 0,
             \ 'edit_action' : 'tabopen',
             \ })
+
+augroup GP_LanguageClient
+    autocmd!
+    autocmd FileType typescript setlocal omnifunc=LanguageClient#complete
+    autocmd FileType php LanguageClientStart
+augroup END
+
+" LanguageClient
+let g:LanguageClient_serverCommands = {
+    \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
+    \ 'typescript': ['/usr/bin/node', $HOME . '/Git/javascript-typescript-langserver/lib/language-server-stdio'],
+    \ 'javascript': ['/usr/bin/node', $HOME . '/Git/javascript-typescript-langserver/lib/language-server-stdio'],
+    \ 'go': ['go-langserver'],
+    \ 'yaml': ['/usr/bin/node', $HOME . '/Git/yaml-language-server/out/server/src/server.js', '--stdio'],
+    \ 'css': ['css-language-server', '--stdio'],
+    \ 'sass': ['css-language-server', '--stdio'],
+    \ 'less': ['css-language-server', '--stdio'],
+    \ }
+nnoremap <silent> gK :call LanguageClient_textDocument_hover()<CR>
+nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
+nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
 
 " echodoc
 set cmdheight=2
@@ -353,26 +377,29 @@ endfunction"}}}
 if !exists('g:deoplete#omni#input_patterns')
     let g:deoplete#omni#input_patterns = {}
 endif
-let g:deoplete#omni#input_patterns.ruby =
-		\ ['[^. *\t]\.\w*', '[a-zA-Z_]\w*::']
+let g:deoplete#omni#input_patterns.ruby = ['[^. *\t]\.\w*', '[a-zA-Z_]\w*::']
 let g:deoplete#omni#input_patterns.java = '[^. *\t]\.\w*'
-let g:deoplete#omni#input_patterns.php =
-		\ '\w+|[^. \t]->\w*|\w+::\w*'
+let g:deoplete#omni#input_patterns.javascript = '[^. *\t]\.\w*'
+
+if !exists('g:deoplete#omni_patterns')
+    let g:deoplete#omni_patterns = {}
+endif
+let g:deoplete#omni_patterns.php = '\w+|[^. \t]->\w*|\w+::\w*'
+let g:deoplete#omni_patterns.css = '[^. *\t]\.\w*'
+
 
 if !exists('g:deoplete#omni#functions')
 	let g:deoplete#omni#functions = {}
 endif
-" let g:deoplete#omni#functions.ruby = 'rubycomplete#Complete'
-" let g:deoplete#omni#functions.javascript = [
-"  \ 'tern#Complete',
-"  \ 'jspc#omni'
-"  \]
 
 if !exists('g:deoplete#ignore_sources')
     let g:deoplete#ignore_sources = {}
 endif
-let g:deoplete#ignore_sources.c = 'look'
-let g:deoplete#ignore_sources.cpp = 'look'
+
+if !exists('g:deoplete#keyword_patterns')
+    let g:deoplete#keyword_patterns = {}
+endif
+let g:deoplete#keyword_patterns.clojure = '[\w!$%&*+/:<=>?@\^_~\-\.#]*'
 
 " =========================== end of deoplete =============================================
 
@@ -380,9 +407,13 @@ let g:deoplete#ignore_sources.cpp = 'look'
 let g:clang_complete_macros = 1
 let g:clang_complete_patterns = 1
 
-
-" neco-ghc
-autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
+augroup omniFunctions
+    autocmd!
+    autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
+    autocmd FileType javascript setlocal omnifunc=tern#Complete
+    autocmd FileType python setlocal omnifunc=jedi#completions
+    autocmd FileType java setlocal omnifunc=javacomplete#Complete
+augroup END
 
 " neoinclude
 if !exists('g:neoinclude#exts')
@@ -399,6 +430,8 @@ let g:neoinclude#paths.c = '.,/usr/lib/gcc/x86_64-pc-linux-gnu/*/include/,/usr/l
 
 let g:neoinclude#paths.cpp = '.,/usr/include/c++/*/,/usr/include/c++/*/x86_64-pc-linux-gnu/,/usr/include/c++/*/backward/,/usr/lib/gcc/x86_64-pc-linux-gnu/*/include/,/usr/local/include/, /usr/lib/gcc/x86_64-pc-linux-gnu/*/include-fixed/, /usr/lib/gcc/x86_64-pc-linux-gnu/*/include/g++-v6/, /usr/lib/gcc/x86_64-pc-linux-gnu/*/include/g++-v6/backward, /usr/lib/gcc/x86_64-pc-linux-gnu/*/include/g++-v6/x86_64-pc-linux-gnu/, /usr/include/,,'
 
+" deoplete rust
+let g:deoplete#sources#rust#racer_binary = $HOME . '/.local/bin/racer'
 
 " deoplete-ternjs
 " Whether to include the types of the completions in the result data. Default: 0
@@ -408,7 +441,6 @@ let g:deoplete#sources#ternjs#types = 1
 " data. Default: 0
 let g:deoplete#sources#ternjs#depths = 1
 " Whether to include documentation strings (if found) in the result data.
-" Default: 0
 let g:deoplete#sources#ternjs#docs = 1
 " When on, only completions that match the current word at the given point will
 " be returned. Turn this off to get all results, so that you can filter on the
@@ -443,16 +475,14 @@ let g:deoplete#sources#ternjs#filetypes = [
                 \ ]
 
 
-" clojure
-let g:deoplete#keyword_patterns = {}
-let g:deoplete#keyword_patterns.clojure = '[\w!$%&*+/:<=>?@\^_~\-\.#]*'
-
 " jedi
 let g:jedi#completions_enabled = 0
 let g:jedi#auto_vim_configuration = 0
 let g:jedi#smart_auto_mappings = 0
-let g:jedi#use_tabs_not_buffers = 'winwidth'
+let g:jedi#use_tabs_not_buffers = 1
+let g:jedi#use_splits_not_buffers = 'winwidth'
 let g:jedi#usages_command = '<Leader>nn'
+
 
 " neosnippet
 imap <Leader>e <Plug>(neosnippet_expand_or_jump)
