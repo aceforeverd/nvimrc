@@ -43,7 +43,7 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('jodosha/vim-godebug')
     " javascript
     call dein#add('othree/yajs.vim')
-    call dein#add('othree/es.next.syntax.vim', {'merged': 0})
+    call dein#add('othree/es.next.syntax.vim', {'on_ft': 'javascript'})
     call dein#add('othree/javascript-libraries-syntax.vim')
     call dein#add('ternjs/tern_for_vim')
     call dein#add('carlitux/deoplete-ternjs')
@@ -59,7 +59,8 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('sebastianmarkow/deoplete-rust')
     " php
     call dein#add('roxma/LanguageServer-php-neovim', {
-                \ 'build': 'composer install && composer run-script parse-stubs'
+                \ 'build': 'composer install && composer run-script parse-stubs',
+                \ 'on_ft': 'php'
                 \ })
     " elixir
     call dein#add('slashmili/alchemist.vim')
@@ -95,7 +96,7 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     " markdown
     call dein#add('tpope/vim-markdown')
     call dein#add('euclio/vim-markdown-composer', {
-                \ 'build': 'cargo build --release'
+                \ 'build': 'cargo build --release',
                 \ })
     " Language tool
     call dein#add('rhysd/vim-grammarous', {'merged': 0})
@@ -104,6 +105,7 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('benmills/vimux')
     call dein#add('christoomey/vim-tmux-navigator')
     call dein#add('tmux-plugins/vim-tmux')
+    call dein#add('wellle/tmux-complete.vim')
     " gentoo portage syntax
     call dein#add('gentoo/gentoo-syntax')
 
@@ -117,9 +119,6 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('tpope/vim-projectionist')
     " test/debug
     call dein#add('janko-m/vim-test')
-    call dein#add('dbgx/lldb.nvim', {
-                \ 'on_if': 'executable("lldb")'
-                \ })
     " format
     call dein#add('sbdchd/neoformat')
     call dein#add('rhysd/vim-clang-format')
@@ -195,11 +194,10 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
 endif
 
 call plug#begin('~/.config/nvim/vimplug')
-" Plug 'clojure-vim/nvim-parinfer.js'
+Plug 'reasonml-editor/vim-reason-plus'
 if executable('gtags')
     Plug 'jsfaint/gen_tags.vim'
 endif
-Plug 'wellle/tmux-complete.vim'
 " Plug 'clojure-vim/acid.nvim'
 " Plug 'c0r73x/neotags.nvim'
 call plug#end()
@@ -317,20 +315,29 @@ call vimfiler#custom#profile('default', 'context', {
 
 augroup GP_LanguageClient
     autocmd!
-    autocmd FileType typescript setlocal omnifunc=LanguageClient#complete
+    " autocmd FileType typescript setlocal omnifunc=LanguageClient#complete
     autocmd FileType php LanguageClientStart
 augroup END
 
 " LanguageClient
 let g:LanguageClient_serverCommands = {
-    \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
-    \ 'typescript': ['/usr/bin/node', $HOME . '/Git/javascript-typescript-langserver/lib/language-server-stdio'],
-    \ 'javascript': ['/usr/bin/node', $HOME . '/Git/javascript-typescript-langserver/lib/language-server-stdio'],
+    \ 'rust': ['rustup', 'run', 'beta', 'rls'],
+    \ 'typescript': ['javascript-typescript-stdio'],
+    \ 'javascript': ['javascript-typescript-sdtio'],
     \ 'go': ['go-langserver'],
     \ 'yaml': ['/usr/bin/node', $HOME . '/Git/yaml-language-server/out/server/src/server.js', '--stdio'],
     \ 'css': ['css-language-server', '--stdio'],
     \ 'sass': ['css-language-server', '--stdio'],
     \ 'less': ['css-language-server', '--stdio'],
+    \ 'dockerfile': ['docker-langserver', '--stdio'],
+    \ 'reason': ['ocaml-language-server', '--stdio'],
+    \ 'ocaml': ['ocaml-language-server', '--stdio'],
+    \ 'vue': ['vls'],
+    \ 'lua': ['lua-lsp'],
+    \ 'ruby': ['language_server-ruby'],
+    \ 'c': ['clangd'],
+    \ 'cpp': ['clangd'],
+    \ 'python': ['pyls'],
     \ }
 nnoremap <silent> gK :call LanguageClient_textDocument_hover()<CR>
 nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
@@ -426,9 +433,21 @@ if !exists('g:neoinclude#paths')
     let g:neoinclude#paths = {}
 endif
 
-let g:neoinclude#paths.c = '.,/usr/lib/gcc/x86_64-pc-linux-gnu/*/include/,/usr/local/include/,/usr/lib/gcc/x86_64-pc-linux-gnu/*/include-fixed/,/usr/include/,,'
+let g:neoinclude#paths.c = '., /usr/lib/gcc/x86_64-pc-linux-gnu/*/include/, '
+            \ . '/usr/local/include/, '
+            \ . '/usr/lib/gcc/x86_64-pc-linux-gnu/*/include-fixed/, '
+            \ . '/usr/include/,,'
 
-let g:neoinclude#paths.cpp = '.,/usr/include/c++/*/,/usr/include/c++/*/x86_64-pc-linux-gnu/,/usr/include/c++/*/backward/,/usr/lib/gcc/x86_64-pc-linux-gnu/*/include/,/usr/local/include/, /usr/lib/gcc/x86_64-pc-linux-gnu/*/include-fixed/, /usr/lib/gcc/x86_64-pc-linux-gnu/*/include/g++-v6/, /usr/lib/gcc/x86_64-pc-linux-gnu/*/include/g++-v6/backward, /usr/lib/gcc/x86_64-pc-linux-gnu/*/include/g++-v6/x86_64-pc-linux-gnu/, /usr/include/,,'
+let g:neoinclude#paths.cpp = '.,/usr/include/c++/*/,'
+            \ . '/usr/include/c++/*/x86_64-pc-linux-gnu/,'
+            \ . '/usr/include/c++/*/backward/,'
+            \ . '/usr/lib/gcc/x86_64-pc-linux-gnu/*/include/,'
+            \ . '/usr/local/include/,'
+            \ . '/usr/lib/gcc/x86_64-pc-linux-gnu/*/include-fixed/,'
+            \ . '/usr/lib/gcc/x86_64-pc-linux-gnu/*/include/g++-v6/,'
+            \ . '/usr/lib/gcc/x86_64-pc-linux-gnu/*/include/g++-v6/backward,'
+            \ . '/usr/lib/gcc/x86_64-pc-linux-gnu/*/include/g++-v6/x86_64-pc-linux-gnu/,'
+            \ . '/usr/include/,,'
 
 " deoplete rust
 let g:deoplete#sources#rust#racer_binary = $HOME . '/.local/bin/racer'
