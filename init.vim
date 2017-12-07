@@ -16,8 +16,6 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('Shougo/deoplete.nvim')
     call dein#add('Shougo/unite.vim')
     call dein#add('Shougo/vimfiler.vim')
-    call dein#add('Shougo/neosnippet.vim')
-    call dein#add('Shougo/neosnippet-snippets')
     call dein#add('Shougo/denite.nvim')
     call dein#add('Shougo/deol.nvim')
     call dein#add('Shougo/context_filetype.vim')
@@ -28,6 +26,10 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('Shougo/vinarise.vim')
     call dein#add('Shougo/echodoc.vim')
     call dein#add('ujihisa/neco-look')
+    " snippets
+    call dein#add('honza/vim-snippets')
+    call dein#add('Shougo/neosnippet-snippets')
+    call dein#add('Shougo/neosnippet.vim')
 
     " vim
     call dein#add('Shougo/neco-vim')
@@ -50,6 +52,8 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     " typescript
     call dein#add('HerringtonDarkholme/yats.vim')
     call dein#add('mhartington/nvim-typescript')
+    " dart
+    call dein#add('dart-lang/dart-vim-plugin')
     " python
     call dein#add('zchee/deoplete-jedi')
     call dein#add('davidhalter/jedi-vim')
@@ -71,15 +75,20 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     " Repl
     call dein#add('hkupty/iron.nvim')
     " java
-    call dein#add('artur-shaik/vim-javacomplete2')
+    call dein#add('artur-shaik/vim-javacomplete2', {
+                \ 'on_ft': 'java',
+                \ })
+    " ruby
+    call dein#add('Shougo/deoplete-rct')
     " rails
     call dein#add('tpope/vim-rails')
     " zsh
     call dein#add('zchee/deoplete-zsh')
+    " elm
+    call dein#add('elmcast/elm-vim')
+    call dein#add('pbogut/deoplete-elm')
     " R
     call dein#add('jalvesaq/Nvim-R')
-    " ruby
-    call dein#add('Shougo/deoplete-rct')
     " glsl
     call dein#add('tikhomirov/vim-glsl')
     " haskell
@@ -148,6 +157,7 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('alvan/vim-closetag')
     call dein#add('godlygeek/tabular')
     call dein#add('neovim/node-host')
+    call dein#add('jsfaint/gen_tags.vim')
 
     " text object manipulate
     call dein#add('tpope/vim-surround')
@@ -188,16 +198,12 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('MattesGroeger/vim-bookmarks')
     call dein#add('ryanoasis/vim-devicons')
 
-    " Required:
     call dein#end()
     call dein#save_state()
 endif
 
 call plug#begin('~/.config/nvim/vimplug')
-Plug 'reasonml-editor/vim-reason-plus'
-if executable('gtags')
-    Plug 'jsfaint/gen_tags.vim'
-endif
+" Plug 'reasonml-editor/vim-reason-plus'
 " Plug 'clojure-vim/acid.nvim'
 " Plug 'c0r73x/neotags.nvim'
 call plug#end()
@@ -338,6 +344,7 @@ let g:LanguageClient_serverCommands = {
     \ 'c': ['clangd'],
     \ 'cpp': ['clangd'],
     \ 'python': ['pyls'],
+    \ 'dart': ['dart_language_server'],
     \ }
 nnoremap <silent> gK :call LanguageClient_textDocument_hover()<CR>
 nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
@@ -379,7 +386,7 @@ inoremap <expr> <S-TAB>
 function! s:check_back_space() abort "{{{
     let col = col('.') - 1
     return !col || getline('.')[col - 1]  =~ '\s'
-endfunction"}}}
+endfunction "}}}
 
 if !exists('g:deoplete#omni#input_patterns')
     let g:deoplete#omni#input_patterns = {}
@@ -433,12 +440,14 @@ if !exists('g:neoinclude#paths')
     let g:neoinclude#paths = {}
 endif
 
-let g:neoinclude#paths.c = '., /usr/lib/gcc/x86_64-pc-linux-gnu/*/include/, '
-            \ . '/usr/local/include/, '
-            \ . '/usr/lib/gcc/x86_64-pc-linux-gnu/*/include-fixed/, '
+let g:neoinclude#paths.c = '.,'
+            \ . '/usr/lib/gcc/x86_64-pc-linux-gnu/*/include/,'
+            \ . '/usr/local/include/,'
+            \ . '/usr/lib/gcc/x86_64-pc-linux-gnu/*/include-fixed/,'
             \ . '/usr/include/,,'
 
-let g:neoinclude#paths.cpp = '.,/usr/include/c++/*/,'
+let g:neoinclude#paths.cpp = '.,'
+            \ . '/usr/include/c++/*/,'
             \ . '/usr/include/c++/*/x86_64-pc-linux-gnu/,'
             \ . '/usr/include/c++/*/backward/,'
             \ . '/usr/lib/gcc/x86_64-pc-linux-gnu/*/include/,'
@@ -507,6 +516,7 @@ let g:jedi#usages_command = '<Leader>nn'
 imap <Leader>e <Plug>(neosnippet_expand_or_jump)
 smap <Leader>e <Plug>(neosnippet_expand_or_jump)
 xmap <Leader>e <Plug>(neosnippet_expand_target)
+let g:neosnippet#enable_snipmate_compatibility = 1
 
 " editorconfig
 let g:EditorConfig_exclude_patterns = ['fugitive://.*', 'scp://*']
@@ -587,3 +597,6 @@ let g:tmux_navigator_no_mappings = 1
 
 " tmux-complete
 let g:tmuxcomplete#trigger = ''
+
+" elm-vim
+let g:elm_setup_keybindings = 0
