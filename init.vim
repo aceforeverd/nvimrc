@@ -31,11 +31,16 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('Shougo/neosnippet-snippets')
     call dein#add('Shougo/neosnippet.vim')
 
+    call dein#add('roxma/nvim-completion-manager')
+    " call dein#add('roxma/ncm-clang')
+
     " vim
     call dein#add('Shougo/neco-vim')
     " c/c++
     call dein#add('octol/vim-cpp-enhanced-highlight')
-    call dein#add('Rip-Rip/clang_complete')
+    call dein#add('Rip-Rip/clang_complete', {
+                \ 'on_ft': ['c', 'cpp', 'objc']
+                \ })
     " go
     call dein#add('fatih/vim-go')
     call dein#add('zchee/deoplete-go', {
@@ -51,11 +56,11 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('carlitux/deoplete-ternjs')
     " typescript
     call dein#add('HerringtonDarkholme/yats.vim')
-    call dein#add('mhartington/nvim-typescript')
+    call dein#add('mhartington/nvim-typescript', {'on_ft': 'typescript'})
     " dart
     call dein#add('dart-lang/dart-vim-plugin')
     " python
-    call dein#add('zchee/deoplete-jedi')
+    call dein#add('zchee/deoplete-jedi', {'on_ft': 'python'})
     call dein#add('davidhalter/jedi-vim')
     " rust
     call dein#add('rust-lang/rust.vim')
@@ -71,6 +76,7 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     " clojure
     call dein#add('clojure-vim/async-clj-omni')
     call dein#add('tpope/vim-fireplace')
+    call dein#add('guns/vim-clojure-static')
     call dein#add('clojure-vim/vim-cider')
     " Repl
     call dein#add('hkupty/iron.nvim')
@@ -94,12 +100,14 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     " haskell
     call dein#add('eagletmt/neco-ghc')
     call dein#add('neovimhaskell/haskell-vim')
+    " asm
+    call dein#add('zchee/deoplete-asm')
     " html
     call dein#add('othree/html5.vim')
     call dein#add('mattn/emmet-vim')
     " css
     call dein#add('ap/vim-css-color', {'merged': 0})
-    call dein#add('hail2u/vim-css3-syntax', {'on_ft': ['css', 'scss', 'html']})
+    call dein#add('hail2u/vim-css3-syntax', {'merged': 0})
     " csv
     call dein#add('chrisbra/csv.vim')
     " markdown
@@ -126,6 +134,12 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('haya14busa/dein-command.vim')
     call dein#add('editorconfig/editorconfig-vim')
     call dein#add('tpope/vim-projectionist')
+    call dein#add('tpope/vim-endwise')
+    call dein#add('tpope/vim-repeat')
+    call dein#add('tpope/vim-unimpaired')
+    call dein#add('tpope/vim-dispatch')
+    call dein#add('kassio/neoterm')
+    call dein#add('mhinz/vim-sayonara', {'on_cmd': 'Sayonara'})
     " test/debug
     call dein#add('janko-m/vim-test')
     " format
@@ -136,19 +150,13 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('tpope/vim-fugitive')
     call dein#add('junegunn/gv.vim')
     call dein#add('jreybert/vimagit')
-    call dein#add('mhinz/vim-signify')
+    call dein#add('airblade/vim-gitgutter')
     call dein#add('lambdalisue/gina.vim')
     call dein#add('mattn/gist-vim')
     call dein#add('idanarye/vim-merginal')
     call dein#add('rhysd/committia.vim')
     " history
     call dein#add('mbbill/undotree')
-
-    " tools
-    call dein#add('tpope/vim-endwise')
-    call dein#add('tpope/vim-repeat')
-    call dein#add('tpope/vim-unimpaired')
-    call dein#add('tpope/vim-dispatch')
 
     " comment
     call dein#add('tpope/vim-commentary')
@@ -169,7 +177,9 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('tommcdo/vim-exchange')
     call dein#add('matze/vim-move')
     call dein#add('terryma/vim-multiple-cursors')
-    call dein#add('brooth/far.vim')
+
+    " not merge, likely break nvim-typescript
+    call dein#add('brooth/far.vim', {'merged': 0})
     " motion
     call dein#add('easymotion/vim-easymotion')
     call dein#add('rhysd/clever-f.vim')
@@ -203,9 +213,17 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
 endif
 
 call plug#begin('~/.config/nvim/vimplug')
-" Plug 'reasonml-editor/vim-reason-plus'
-" Plug 'clojure-vim/acid.nvim'
-" Plug 'c0r73x/neotags.nvim'
+if executable('lldb')
+    Plug 'dbgx/lldb.nvim'
+endif
+" not merge, liky break deoplete and many things
+Plug 'wbthomason/buildit.nvim', {'do': ':UpdateRemotePlugins'}
+Plug 'phpactor/phpactor', {
+            \ 'do': 'composer install',
+            \ 'for': 'php',
+            \ 'dir': $HOME . '/.phpactor',
+            \ }
+Plug 'roxma/ncm-phpactor', {'for': 'php'}
 call plug#end()
 
 filetype plugin indent on
@@ -236,6 +254,7 @@ set smartcase
 set incsearch
 set ignorecase
 set hidden
+set updatetime=500
 
 " cursor shape
 set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
@@ -294,10 +313,6 @@ if executable('rg')
     set grepprg=rg\ --vimgrep
 endif
 
-" ferret
-let g:FerretMap = 0
-let g:FerretNvim = 1
-
 " filetypes
 autocmd BufRead,BufNewFile *.h setlocal  filetype=c
 autocmd BufRead,BufNewFile *.verilog,*.vlg setlocal  filetype=verilog
@@ -344,11 +359,16 @@ let g:LanguageClient_serverCommands = {
     \ 'c': ['clangd'],
     \ 'cpp': ['clangd'],
     \ 'python': ['pyls'],
-    \ 'dart': ['dart_language_server'],
+    \ 'dart': ['dart_language_server', '--force_trace_level=off'],
+    \ 'haskell': ['hie', '--lsp'],
     \ }
 nnoremap <silent> gK :call LanguageClient_textDocument_hover()<CR>
 nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
 nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
+
+" nvim-completion-manager
+let g:cm_smart_enable = 0
+let g:cm_sources_enable = 0
 
 " echodoc
 set cmdheight=2
@@ -394,6 +414,7 @@ endif
 let g:deoplete#omni#input_patterns.ruby = ['[^. *\t]\.\w*', '[a-zA-Z_]\w*::']
 let g:deoplete#omni#input_patterns.java = '[^. *\t]\.\w*'
 let g:deoplete#omni#input_patterns.javascript = '[^. *\t]\.\w*'
+" let g:deoplete#omni#input_patterns.typescript = '[^. *\t]\.\w*\|\h\w*::'
 
 if !exists('g:deoplete#omni_patterns')
     let g:deoplete#omni_patterns = {}
@@ -405,6 +426,12 @@ let g:deoplete#omni_patterns.css = '[^. *\t]\.\w*'
 if !exists('g:deoplete#omni#functions')
 	let g:deoplete#omni#functions = {}
 endif
+let g:deoplete#omni#functions.typescript = [ 'LanguageClient#complete' ]
+let g:deoplete#omni#functions.html = [ 'htmlcomplete#CompleteTags',
+            \ 'tern#Complete', 'csscomplete#CompleteCSS']
+let g:deoplete#omni#functions.php = [ 'phpactor#Complete', 'LanguageClient#complete' ]
+let g:deoplete#omni#functions.c = [ 'ClangComplete', 'LanguageClient#complete' ]
+let g:deoplete#omni#functions.cpp = [ 'ClangComplete', 'LanguageClient#complete' ]
 
 if !exists('g:deoplete#ignore_sources')
     let g:deoplete#ignore_sources = {}
@@ -458,8 +485,6 @@ let g:neoinclude#paths.cpp = '.,'
             \ . '/usr/lib/gcc/x86_64-pc-linux-gnu/*/include/g++-v6/x86_64-pc-linux-gnu/,'
             \ . '/usr/include/,,'
 
-" deoplete rust
-let g:deoplete#sources#rust#racer_binary = $HOME . '/.local/bin/racer'
 
 " deoplete-ternjs
 " Whether to include the types of the completions in the result data. Default: 0
@@ -501,6 +526,9 @@ let g:deoplete#sources#ternjs#filetypes = [
                 \ 'vue',
                 \ '...'
                 \ ]
+" tern_for_vim
+let g:tern#command = ['tern']
+let g:tern#arguments = ['--persistent']
 
 
 " jedi
@@ -542,6 +570,8 @@ endif
 
 " vim-markdown
 let g:vim_markdown_folding_disabled = 1
+let g:markdown_fenced_languages = ['html', 'json', 'javascript', 'c', 'cpp',
+            \ 'python', 'bash=sh']
 
 " Ale
 let g:ale_linters = {
@@ -561,7 +591,6 @@ nmap N <Plug>(anzu-N-with-echo)
 map <Leader>/ <Plug>(incsearch-forward)
 map <Leader>? <Plug>(incsearch-backward)
 map <Leader>g/ <Plug>(incsearch-stay)
-" map * <Plug>(asterisk-*)
 
 " easy-align
 " Start interactive EasyAlign in visual mode (e.g. vip<Enter>)
@@ -600,3 +629,11 @@ let g:tmuxcomplete#trigger = ''
 
 " elm-vim
 let g:elm_setup_keybindings = 0
+
+" gen_tag.vim
+if !executable('gtags')
+    " disable gtags support
+    let g:loaded_gentags#gtags = 1
+endif
+
+autocmd BufNewFile,BufRead *.ts setlocal filetype=typescript
