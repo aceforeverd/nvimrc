@@ -32,7 +32,9 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('Shougo/neosnippet.vim')
 
     call dein#add('roxma/nvim-completion-manager')
-    " call dein#add('roxma/ncm-clang')
+    call dein#add('roxma/ncm-clang', {
+                \ 'on_ft': ['c', 'cpp']
+                \ })
 
     " vim
     call dein#add('Shougo/neco-vim')
@@ -164,7 +166,6 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('Raimondi/delimitMate')
     call dein#add('alvan/vim-closetag')
     call dein#add('godlygeek/tabular')
-    call dein#add('neovim/node-host')
     call dein#add('jsfaint/gen_tags.vim')
 
     " text object manipulate
@@ -178,8 +179,6 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('matze/vim-move')
     call dein#add('terryma/vim-multiple-cursors')
 
-    " not merge, likely break nvim-typescript
-    call dein#add('brooth/far.vim', {'merged': 0})
     " motion
     call dein#add('easymotion/vim-easymotion')
     call dein#add('rhysd/clever-f.vim')
@@ -224,7 +223,13 @@ Plug 'phpactor/phpactor', {
             \ 'dir': $HOME . '/.phpactor',
             \ }
 Plug 'roxma/ncm-phpactor', {'for': 'php'}
+if !has('nvim-0.2.1')
+    Plug 'neovim/node-host'
+endif
 call plug#end()
+
+" pathogen
+execute pathogen#infect('~/.config/nvim/bundle/{}')
 
 filetype plugin indent on
 syntax enable
@@ -328,6 +333,8 @@ let g:vimfiler_marked_file_icon = '*'
 
 " signify
 let g:signify_sign_change = '~'
+" vim-gitgutter
+let g:gitgutter_max_signs = 1000
 
 call vimfiler#custom#profile('default', 'context', {
             \ 'safe' : 0,
@@ -507,11 +514,11 @@ let g:deoplete#sources#ternjs#case_insensitive = 1
 " turn that off. Default: 1
 let g:deoplete#sources#ternjs#guess = 0
 " Determines whether the result set will be sorted. Default: 1
-let g:deoplete#sources#ternjs#sort = 0
+" let g:deoplete#sources#ternjs#sort = 0
 " When disabled, only the text before the given position is considered part of
 " the word. When enabled (the default), the whole variable name that the cursor
 " is on will be included. Default: 1
-let g:deoplete#sources#ternjs#expand_word_forward = 0
+" let g:deoplete#sources#ternjs#expand_word_forward = 0
 " Whether to ignore the properties of Object.prototype unless they have been
 " spelled out by at least to characters. Default: 1
 let g:deoplete#sources#ternjs#omit_object_prototype = 0
@@ -636,4 +643,3 @@ if !executable('gtags')
     let g:loaded_gentags#gtags = 1
 endif
 
-autocmd BufNewFile,BufRead *.ts setlocal filetype=typescript
