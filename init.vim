@@ -49,7 +49,7 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
                 \ 'build': 'make',
                 \ 'on_ft': 'go'
                 \ })
-    call dein#add('jodosha/vim-godebug')
+    call dein#add('jodosha/vim-godebug', {'on_ft': 'go'})
     " javascript
     call dein#add('othree/yajs.vim')
     call dein#add('othree/es.next.syntax.vim', {'on_ft': 'javascript'})
@@ -63,11 +63,11 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('dart-lang/dart-vim-plugin')
     " python
     call dein#add('zchee/deoplete-jedi', {'on_ft': 'python'})
-    call dein#add('davidhalter/jedi-vim')
+    call dein#add('davidhalter/jedi-vim', {'on_ft': 'python'})
     " rust
-    call dein#add('rust-lang/rust.vim')
+    call dein#add('rust-lang/rust.vim', {'on_ft': 'rust'})
     call dein#add('racer-rust/vim-racer')
-    call dein#add('sebastianmarkow/deoplete-rust')
+    call dein#add('sebastianmarkow/deoplete-rust', {'on_ft': 'rust'})
     " php
     call dein#add('roxma/LanguageServer-php-neovim', {
                 \ 'build': 'composer install && composer run-script parse-stubs',
@@ -76,9 +76,9 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     " elixir
     call dein#add('slashmili/alchemist.vim')
     " clojure
-    call dein#add('clojure-vim/async-clj-omni')
     call dein#add('tpope/vim-fireplace')
     call dein#add('guns/vim-clojure-static')
+    call dein#add('clojure-vim/async-clj-omni')
     call dein#add('clojure-vim/vim-cider')
     " Repl
     call dein#add('hkupty/iron.nvim')
@@ -110,6 +110,9 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     " css
     call dein#add('ap/vim-css-color', {'merged': 0})
     call dein#add('hail2u/vim-css3-syntax', {'merged': 0})
+    " Latex
+    call dein#add('lervag/vimtex')
+    call dein#add('xuhdev/vim-latex-live-preview')
     " csv
     call dein#add('chrisbra/csv.vim')
     " markdown
@@ -141,6 +144,7 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('tpope/vim-unimpaired')
     call dein#add('tpope/vim-dispatch')
     call dein#add('kassio/neoterm')
+    call dein#add('alpertuna/vim-header')
     call dein#add('mhinz/vim-sayonara', {'on_cmd': 'Sayonara'})
     " test/debug
     call dein#add('janko-m/vim-test')
@@ -161,7 +165,7 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('mbbill/undotree')
 
     " comment
-    call dein#add('tpope/vim-commentary')
+    call dein#add('tomtom/tcomment_vim')
 
     call dein#add('Raimondi/delimitMate')
     call dein#add('alvan/vim-closetag')
@@ -454,6 +458,7 @@ let g:deoplete#keyword_patterns.clojure = '[\w!$%&*+/:<=>?@\^_~\-\.#]*'
 " clang_complete
 let g:clang_complete_macros = 1
 let g:clang_complete_patterns = 1
+let g:clang_omnicppcomplete_compliance = 0
 
 augroup omniFunctions
     autocmd!
@@ -642,4 +647,7 @@ if !executable('gtags')
     " disable gtags support
     let g:loaded_gentags#gtags = 1
 endif
+
+" vim-header
+let g:header_auto_add_header = 0
 
