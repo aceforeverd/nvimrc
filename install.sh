@@ -1,4 +1,4 @@
-#/bin/bash
+#!/bin/bash
 
 INIT=https://raw.githubusercontent.com/aceforeverd/nvimrc/master/init.vim
 VIMPLUG=https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
@@ -33,4 +33,6 @@ if [ -f "$NVIMRC" ] ; then
     fi
 fi
 
-echo -e "installation done, execute ':call dein#install()' in nvim to install plugins"
+echo -e "installation done, please execute"
+echo -e "    :call dein#install() and :PlugInstall"
+echo -e "in nvim to install plugins"
