@@ -40,9 +40,9 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('Shougo/neco-vim')
     " c/c++
     call dein#add('octol/vim-cpp-enhanced-highlight')
-    call dein#add('Rip-Rip/clang_complete', {
-                \ 'on_ft': ['c', 'cpp', 'objc']
-                \ })
+    " call dein#add('Rip-Rip/clang_complete', {
+    "             \ 'on_ft': ['c', 'cpp', 'objc']
+    "             \ })
     " go
     call dein#add('fatih/vim-go')
     call dein#add('zchee/deoplete-go', {
@@ -334,16 +334,19 @@ let g:vimfiler_ignore_pattern = ['^\.', '\.o$']
 let g:vimfiler_tree_opened_icon = '▾'
 let g:vimfiler_tree_closed_icon = '▸'
 let g:vimfiler_marked_file_icon = '*'
+augroup vimfiler_group
+    autocmd!
+    autocmd FileType vimfiler setlocal cursorline
+augroup END
+call vimfiler#custom#profile('default', 'context', {
+            \ 'safe' : 0,
+            \ 'edit_action' : 'tabopen',
+            \ })
 
 " signify
 let g:signify_sign_change = '~'
 " vim-gitgutter
 let g:gitgutter_max_signs = 1000
-
-call vimfiler#custom#profile('default', 'context', {
-            \ 'safe' : 0,
-            \ 'edit_action' : 'tabopen',
-            \ })
 
 augroup GP_LanguageClient
     autocmd!
@@ -632,6 +635,7 @@ augroup END
 
 " vim-bookmarks
 let g:bookmark_no_default_key_mappings = 1
+nnoremap <Leader>b :BookmarkToggle<CR>
 
 " tmux-navigator
 let g:tmux_navigator_no_mappings = 1
