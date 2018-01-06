@@ -122,7 +122,10 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
                 \ })
     " Language tool
     call dein#add('rhysd/vim-grammarous', {'merged': 0})
-    call dein#add('autozimu/LanguageClient-neovim')
+    call dein#add('autozimu/languageclient-neovim', {
+                \ 'rev': 'master',
+                \ 'merged': 0,
+                \ })
     " tmux
     call dein#add('benmills/vimux')
     call dein#add('christoomey/vim-tmux-navigator')
@@ -145,6 +148,7 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('tpope/vim-dispatch')
     call dein#add('kassio/neoterm')
     call dein#add('alpertuna/vim-header')
+    call dein#add('justinmk/vim-gtfo')
     call dein#add('mhinz/vim-sayonara', {'on_cmd': 'Sayonara'})
     " test/debug
     call dein#add('janko-m/vim-test')
@@ -210,6 +214,7 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('junegunn/rainbow_parentheses.vim')
     call dein#add('MattesGroeger/vim-bookmarks')
     call dein#add('ryanoasis/vim-devicons')
+    call dein#add('jceb/vim-orgmode')
 
     call dein#end()
     call dein#save_state()
@@ -219,7 +224,12 @@ call plug#begin('~/.config/nvim/vimplug')
 if executable('lldb')
     Plug 'dbgx/lldb.nvim'
 endif
-" not merge, liky break deoplete and many things
+" Plug 'autozimu/LanguageClient-neovim', {
+"             \ 'branch': 'next',
+"             \ 'do': 'make release',
+"             \ 'dir': $HOME . '/.LanguageClient-neovim',
+"             \ }
+Plug 'chrisbra/unicode.vim'
 Plug 'wbthomason/buildit.nvim', {'do': ':UpdateRemotePlugins'}
 Plug 'phpactor/phpactor', {
             \ 'do': 'composer install',
@@ -227,9 +237,6 @@ Plug 'phpactor/phpactor', {
             \ 'dir': $HOME . '/.phpactor',
             \ }
 Plug 'roxma/ncm-phpactor', {'for': 'php'}
-if !has('nvim-0.2.1')
-    Plug 'neovim/node-host'
-endif
 call plug#end()
 
 " pathogen
@@ -355,6 +362,9 @@ augroup GP_LanguageClient
 augroup END
 
 " LanguageClient
+let g:LanguageClient_autoStart = 0
+let g:LanguageClient_selectionUI = 'fzf'
+let g:LanguageClient_loadSettings = 1
 let g:LanguageClient_serverCommands = {
     \ 'rust': ['rustup', 'run', 'beta', 'rls'],
     \ 'typescript': ['javascript-typescript-stdio'],
@@ -455,6 +465,8 @@ if !exists('g:deoplete#keyword_patterns')
     let g:deoplete#keyword_patterns = {}
 endif
 let g:deoplete#keyword_patterns.clojure = '[\w!$%&*+/:<=>?@\^_~\-\.#]*'
+
+call deoplete#custom#source('look', 'rank', 50)
 
 " =========================== end of deoplete =============================================
 
