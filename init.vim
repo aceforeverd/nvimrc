@@ -271,6 +271,7 @@ set incsearch
 set ignorecase
 set hidden
 set updatetime=500
+set autowrite
 
 " cursor shape
 set guicursor=n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50
@@ -589,6 +590,13 @@ let g:delimitMate_expand_cr = 2
 let g:delimitMate_expand_space = 1
 let g:delimitMate_balance_matchpairs = 1
 " let g:delimitMate_jump_expansion = 1
+augroup delimitMateCustom
+    autocmd!
+    autocmd FileType html,xhtml,xml let b:delimitMate_matchpairs = "(:),[:],{:}"
+augroup END
+
+" close-tag
+let g:closetag_filenames = "*.html,*.xml,*.xhtml"
 
 " Make VIM remember position in file after reopen
 if has('autocmd')
@@ -602,6 +610,7 @@ let g:markdown_fenced_languages = ['html', 'json', 'javascript', 'c', 'cpp',
 
 " Ale
 let g:ale_linters = {
+            \ 'go': ['gofmt', 'go vet', 'golint', 'gotype'],
             \ }
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
