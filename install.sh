@@ -4,7 +4,7 @@ INIT=https://raw.githubusercontent.com/aceforeverd/nvimrc/master/init.vim
 VIMPLUG=https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 DEIN=https://github.com/Shougo/dein.vim.git
 CONFIG_PATH=$HOME/.config/nvim
-DEIN_PATH=~/.config/nvim/dein.vim/repos/github.com/Shougo/dein.vim
+DEIN_PATH=$CONFIG_PATH/dein.vim/repos/github.com/Shougo/dein.vim
 NVIMRC=$CONFIG_PATH/init.vim
 
 if [ ! -d "$CONFIG_PATH/autoload" ] ; then
@@ -12,7 +12,6 @@ if [ ! -d "$CONFIG_PATH/autoload" ] ; then
 fi
 
 wget $VIMPLUG -O "$CONFIG_PATH/autoload/plug.vim"
-
 
 if [ ! -d "$DEIN_PATH" ] ; then
     mkdir -p "$DEIN_PATH"

@@ -117,15 +117,11 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('chrisbra/csv.vim')
     " markdown
     call dein#add('tpope/vim-markdown')
-    call dein#add('euclio/vim-markdown-composer', {
-                \ 'build': 'cargo build --release',
-                \ })
     " Language tool
-    call dein#add('rhysd/vim-grammarous', {'merged': 0})
-    call dein#add('autozimu/languageclient-neovim', {
-                \ 'rev': 'master',
-                \ 'merged': 0,
-                \ })
+    " call dein#add('autozimu/languageclient-neovim', {
+    "             \ 'rev': 'master',
+    "             \ 'merged': 0,
+    "             \ })
     " tmux
     call dein#add('benmills/vimux')
     call dein#add('christoomey/vim-tmux-navigator')
@@ -200,7 +196,6 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
                 \ })
     call dein#add('junegunn/fzf.vim')
     call dein#add('fszymanski/fzf-gitignore')
-    call dein#add('dyng/ctrlsf.vim')
 
     " interface
     call dein#add('itchyny/calendar.vim')
@@ -220,15 +215,15 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#save_state()
 endif
 
-call plug#begin('~/.config/nvim/vimplug')
-if executable('lldb')
-    Plug 'dbgx/lldb.nvim'
+call plug#begin('~/.vim-commons/pkgs')
+Plug 'autozimu/LanguageClient-neovim', {
+            \ 'branch': 'next',
+            \ 'do': 'make release',
+            \ }
+if executable('cargo')
+    Plug 'euclio/vim-markdown-composer', {'do': 'cargo build --release'}
 endif
-" Plug 'autozimu/LanguageClient-neovim', {
-"             \ 'branch': 'next',
-"             \ 'do': 'make release',
-"             \ 'dir': $HOME . '/.LanguageClient-neovim',
-"             \ }
+Plug 'rhysd/vim-grammarous'
 Plug 'chrisbra/unicode.vim'
 Plug 'wbthomason/buildit.nvim', {'do': ':UpdateRemotePlugins'}
 Plug 'phpactor/phpactor', {
@@ -288,8 +283,6 @@ set wildignore=*.o,*~,*.pyc,*/.git/*,*/.svn/*,*/node_modules/*,*/.idea/*,*/.DS_S
 let g:mapleader = ','
 let g:maplocalleader = '\'
 
-nnoremap <Leader>ce :vsplit ~/.config/nvim/init.vim<CR>
-
 nnoremap <Leader>tn :tabnew<cr>
 nnoremap <Leader>to :tabonly<cr>
 nnoremap <Leader>tc :tabclose<cr>
@@ -297,6 +290,8 @@ nnoremap <Leader>tm :tabmove<cr>
 nnoremap <Leader>tl :tabnext<cr>
 nnoremap <Leader>th :tabprevious<cr>
 nnoremap <Leader>te :tabedit <c-r>=expand("%:p:h")<cr>/
+
+nnoremap <Leader>ec :split ~/.config/nvim/init.vim<CR>
 
 " swith to last active tab
 let g:lasttab = 1
@@ -558,7 +553,6 @@ let g:deoplete#sources#ternjs#filetypes = [
 let g:tern#command = ['tern']
 let g:tern#arguments = ['--persistent']
 
-
 " jedi
 let g:jedi#completions_enabled = 0
 let g:jedi#auto_vim_configuration = 0
@@ -566,7 +560,6 @@ let g:jedi#smart_auto_mappings = 0
 let g:jedi#use_tabs_not_buffers = 1
 let g:jedi#use_splits_not_buffers = 'winwidth'
 let g:jedi#usages_command = '<Leader>nn'
-
 
 " neosnippet
 imap <Leader>e <Plug>(neosnippet_expand_or_jump)
@@ -610,7 +603,7 @@ let g:markdown_fenced_languages = ['html', 'json', 'javascript', 'c', 'cpp',
 
 " Ale
 let g:ale_linters = {
-            \ 'go': ['gofmt', 'go vet', 'golint', 'gotype'],
+            \ 'go': ['gofmt', 'go vet', 'golint', 'gotype', 'go build'],
             \ }
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
