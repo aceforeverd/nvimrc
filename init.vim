@@ -113,6 +113,8 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     " Latex
     call dein#add('lervag/vimtex')
     call dein#add('xuhdev/vim-latex-live-preview')
+    " nginx
+    call dein#add('chr4/nginx.vim')
     " csv
     call dein#add('chrisbra/csv.vim')
     " markdown
