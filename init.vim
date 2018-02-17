@@ -65,14 +65,10 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('zchee/deoplete-jedi', {'on_ft': 'python'})
     call dein#add('davidhalter/jedi-vim', {'on_ft': 'python'})
     " rust
-    call dein#add('rust-lang/rust.vim', {'on_ft': 'rust'})
+    call dein#add('rust-lang/rust.vim')
     call dein#add('racer-rust/vim-racer')
-    call dein#add('sebastianmarkow/deoplete-rust', {'on_ft': 'rust'})
-    " php
-    call dein#add('roxma/LanguageServer-php-neovim', {
-                \ 'build': 'composer install && composer run-script parse-stubs',
-                \ 'on_ft': 'php'
-                \ })
+    " webapi
+    call dein#add('mattn/webapi-vim')
     " elixir
     call dein#add('slashmili/alchemist.vim')
     " clojure
@@ -119,11 +115,6 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('chrisbra/csv.vim')
     " markdown
     call dein#add('tpope/vim-markdown')
-    " Language tool
-    " call dein#add('autozimu/languageclient-neovim', {
-    "             \ 'rev': 'master',
-    "             \ 'merged': 0,
-    "             \ })
     " tmux
     call dein#add('benmills/vimux')
     call dein#add('christoomey/vim-tmux-navigator')
@@ -218,22 +209,64 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
 endif
 
 call plug#begin('~/.vim-commons/pkgs')
-Plug 'autozimu/LanguageClient-neovim', {
-            \ 'branch': 'next',
-            \ 'do': 'make release',
-            \ }
+
 if executable('cargo')
+    Plug 'autozimu/LanguageClient-neovim', {
+                \ 'branch': 'next',
+                \ 'do': 'make release',
+                \ }
+    augroup GP_LanguageClient
+        autocmd!
+        " autocmd FileType typescript setlocal omnifunc=LanguageClient#complete
+        " autocmd FileType php LanguageClientStart
+    augroup END
+
+    " LanguageClient
+    let g:LanguageClient_autoStart = 0
+    let g:LanguageClient_selectionUI = 'fzf'
+    let g:LanguageClient_loadSettings = 1
+    let g:LanguageClient_serverCommands = {
+                \ 'rust': ['rustup', 'run', 'beta', 'rls'],
+                \ 'typescript': ['javascript-typescript-stdio'],
+                \ 'javascript': ['javascript-typescript-sdtio'],
+                \ 'go': ['go-langserver'],
+                \ 'yaml': ['/usr/bin/node', $HOME . '/Git/yaml-language-server/out/server/src/server.js', '--stdio'],
+                \ 'css': ['css-language-server', '--stdio'],
+                \ 'sass': ['css-language-server', '--stdio'],
+                \ 'less': ['css-language-server', '--stdio'],
+                \ 'dockerfile': ['docker-langserver', '--stdio'],
+                \ 'reason': ['ocaml-language-server', '--stdio'],
+                \ 'ocaml': ['ocaml-language-server', '--stdio'],
+                \ 'vue': ['vls'],
+                \ 'lua': ['lua-lsp'],
+                \ 'ruby': ['language_server-ruby'],
+                \ 'c': ['clangd'],
+                \ 'cpp': ['clangd'],
+                \ 'python': ['pyls'],
+                \ 'dart': ['dart_language_server', '--force_trace_level=off'],
+                \ 'haskell': ['hie', '--lsp'],
+                \ 'php': ['php', $HOME . '/.composer/vendor/bin/php-language-server.php', '--memory-limit=256M']
+                \ }
+    nnoremap <silent> gK :call LanguageClient_textDocument_hover()<CR>
+    nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
+    nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
+
     Plug 'euclio/vim-markdown-composer', {'do': 'cargo build --release'}
 endif
+
 Plug 'rhysd/vim-grammarous'
 Plug 'chrisbra/unicode.vim'
 Plug 'wbthomason/buildit.nvim', {'do': ':UpdateRemotePlugins'}
-Plug 'phpactor/phpactor', {
+
+if executable('composer')
+    Plug 'phpactor/phpactor', {
             \ 'do': 'composer install',
             \ 'for': 'php',
             \ 'dir': $HOME . '/.phpactor',
             \ }
-Plug 'roxma/ncm-phpactor', {'for': 'php'}
+    Plug 'roxma/ncm-phpactor', {'for': 'php'}
+endif
+
 call plug#end()
 
 " pathogen
@@ -353,40 +386,6 @@ let g:signify_sign_change = '~'
 " vim-gitgutter
 let g:gitgutter_max_signs = 1000
 
-augroup GP_LanguageClient
-    autocmd!
-    " autocmd FileType typescript setlocal omnifunc=LanguageClient#complete
-    autocmd FileType php LanguageClientStart
-augroup END
-
-" LanguageClient
-let g:LanguageClient_autoStart = 0
-let g:LanguageClient_selectionUI = 'fzf'
-let g:LanguageClient_loadSettings = 1
-let g:LanguageClient_serverCommands = {
-    \ 'rust': ['rustup', 'run', 'beta', 'rls'],
-    \ 'typescript': ['javascript-typescript-stdio'],
-    \ 'javascript': ['javascript-typescript-sdtio'],
-    \ 'go': ['go-langserver'],
-    \ 'yaml': ['/usr/bin/node', $HOME . '/Git/yaml-language-server/out/server/src/server.js', '--stdio'],
-    \ 'css': ['css-language-server', '--stdio'],
-    \ 'sass': ['css-language-server', '--stdio'],
-    \ 'less': ['css-language-server', '--stdio'],
-    \ 'dockerfile': ['docker-langserver', '--stdio'],
-    \ 'reason': ['ocaml-language-server', '--stdio'],
-    \ 'ocaml': ['ocaml-language-server', '--stdio'],
-    \ 'vue': ['vls'],
-    \ 'lua': ['lua-lsp'],
-    \ 'ruby': ['language_server-ruby'],
-    \ 'c': ['clangd'],
-    \ 'cpp': ['clangd'],
-    \ 'python': ['pyls'],
-    \ 'dart': ['dart_language_server', '--force_trace_level=off'],
-    \ 'haskell': ['hie', '--lsp'],
-    \ }
-nnoremap <silent> gK :call LanguageClient_textDocument_hover()<CR>
-nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
-nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
 
 " nvim-completion-manager
 let g:cm_smart_enable = 0
