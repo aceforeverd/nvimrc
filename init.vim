@@ -79,9 +79,7 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     " Repl
     call dein#add('hkupty/iron.nvim')
     " java
-    call dein#add('artur-shaik/vim-javacomplete2', {
-                \ 'on_ft': 'java',
-                \ })
+    call dein#add('artur-shaik/vim-javacomplete2', { 'on_ft': 'java' })
     " ruby
     call dein#add('Shougo/deoplete-rct')
     " rails
@@ -138,7 +136,7 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('kassio/neoterm')
     call dein#add('alpertuna/vim-header')
     call dein#add('justinmk/vim-gtfo')
-    call dein#add('mhinz/vim-sayonara', {'on_cmd': 'Sayonara'})
+    call dein#add('mhinz/vim-sayonara')
     " test/debug
     call dein#add('janko-m/vim-test')
     " format
@@ -230,7 +228,7 @@ if executable('cargo')
                 \ 'typescript': ['javascript-typescript-stdio'],
                 \ 'javascript': ['javascript-typescript-sdtio'],
                 \ 'go': ['go-langserver'],
-                \ 'yaml': ['/usr/bin/node', $HOME . '/Git/yaml-language-server/out/server/src/server.js', '--stdio'],
+                \ 'yaml': ['/usr/bin/node', $HOME . '/.npm_global/lib64/node_modules/yaml-language-server/out/server/src/server.js', '--stdio'],
                 \ 'css': ['css-language-server', '--stdio'],
                 \ 'sass': ['css-language-server', '--stdio'],
                 \ 'less': ['css-language-server', '--stdio'],
@@ -256,7 +254,6 @@ endif
 
 Plug 'rhysd/vim-grammarous'
 Plug 'chrisbra/unicode.vim'
-Plug 'wbthomason/buildit.nvim', {'do': ':UpdateRemotePlugins'}
 
 if executable('composer')
     Plug 'phpactor/phpactor', {
@@ -448,11 +445,11 @@ if !exists('g:deoplete#omni#functions')
 	let g:deoplete#omni#functions = {}
 endif
 let g:deoplete#omni#functions.typescript = [ 'LanguageClient#complete' ]
-let g:deoplete#omni#functions.html = [ 'htmlcomplete#CompleteTags',
-            \ 'tern#Complete', 'csscomplete#CompleteCSS']
+let g:deoplete#omni#functions.html = [ 'htmlcomplete#CompleteTags', 'tern#Complete', 'csscomplete#CompleteCSS']
 let g:deoplete#omni#functions.php = [ 'phpactor#Complete', 'LanguageClient#complete' ]
 let g:deoplete#omni#functions.c = [ 'ClangComplete', 'LanguageClient#complete' ]
 let g:deoplete#omni#functions.cpp = [ 'ClangComplete', 'LanguageClient#complete' ]
+let g:deoplete#omni#functions.rust = [ 'racer#RacerComplete', 'LanguageClient#complete']
 
 if !exists('g:deoplete#ignore_sources')
     let g:deoplete#ignore_sources = {}
@@ -479,6 +476,9 @@ augroup omniFunctions
     autocmd FileType python setlocal omnifunc=jedi#completions
     autocmd FileType java setlocal omnifunc=javacomplete#Complete
 augroup END
+
+" neco-ghc
+let g:necoghc_enable_detailed_browse = 1
 
 " neoinclude
 if !exists('g:neoinclude#exts')
@@ -605,6 +605,7 @@ let g:markdown_fenced_languages = ['html', 'json', 'javascript', 'c', 'cpp',
 " Ale
 let g:ale_linters = {
             \ 'go': ['gofmt', 'go vet', 'golint', 'gotype', 'go build'],
+            \ 'rust': ['cargo', 'rls', 'rustc'],
             \ }
 let g:ale_echo_msg_error_str = 'E'
 let g:ale_echo_msg_warning_str = 'W'
@@ -612,8 +613,25 @@ let g:ale_echo_msg_format = '[%linter%] %s [%severity%]'
 let g:ale_sign_error = '✖'
 let g:ale_sign_warning = '⚠'
 let g:ale_sign_info = 'ℹ'
+" let g:ale_emit_conflict_warnings = 0
 nmap <silent> <c-k> <Plug>(ale_previous_wrap)
 nmap <silent> <c-j> <Plug>(ale_next_wrap)
+
+" vim-racer
+let g:racer_experimental_completer = 1
+augroup RACER_RUST
+    autocmd!
+    autocmd FileType rust command! RustDef call racer#GoToDefinition()
+    autocmd FileType rust command! RustDoc call racer#ShowDocumentation()
+    autocmd FileType rust nmap <c-]> <Plug>(rust-def)
+    autocmd FileType rust nmap <c-w>] <Plug>(rust-def-split)
+augroup END
+
+" vim-go
+augroup VIM_GO
+    autocmd!
+    autocmd FileType go nnoremap <c-]> :GoDef<CR>
+augroup END
 
 " incsearch.vim
 nmap n <Plug>(anzu-n-with-echo)
