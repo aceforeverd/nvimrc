@@ -40,9 +40,6 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('Shougo/neco-vim')
     " c/c++
     call dein#add('octol/vim-cpp-enhanced-highlight')
-    " call dein#add('Rip-Rip/clang_complete', {
-    "             \ 'on_ft': ['c', 'cpp', 'objc']
-    "             \ })
     " go
     call dein#add('fatih/vim-go')
     call dein#add('zchee/deoplete-go', {
@@ -254,6 +251,7 @@ endif
 
 Plug 'rhysd/vim-grammarous'
 Plug 'chrisbra/unicode.vim'
+Plug 'aceforeverd/clang_complete', {'for': ['c', 'cpp', 'objc']}
 
 if executable('composer')
     Plug 'phpactor/phpactor', {
@@ -492,21 +490,21 @@ if !exists('g:neoinclude#paths')
 endif
 
 let g:neoinclude#paths.c = '.,'
-            \ . '/usr/lib/gcc/x86_64-pc-linux-gnu/*/include/,'
+            \ . '/usr/lib/gcc/*/*/include/,'
             \ . '/usr/local/include/,'
-            \ . '/usr/lib/gcc/x86_64-pc-linux-gnu/*/include-fixed/,'
+            \ . '/usr/lib/gcc/*/*/include-fixed/,'
             \ . '/usr/include/,,'
 
 let g:neoinclude#paths.cpp = '.,'
             \ . '/usr/include/c++/*/,'
-            \ . '/usr/include/c++/*/x86_64-pc-linux-gnu/,'
+            \ . '/usr/include/c++/*/*/,'
             \ . '/usr/include/c++/*/backward/,'
-            \ . '/usr/lib/gcc/x86_64-pc-linux-gnu/*/include/,'
             \ . '/usr/local/include/,'
-            \ . '/usr/lib/gcc/x86_64-pc-linux-gnu/*/include-fixed/,'
-            \ . '/usr/lib/gcc/x86_64-pc-linux-gnu/*/include/g++-v6/,'
-            \ . '/usr/lib/gcc/x86_64-pc-linux-gnu/*/include/g++-v6/backward,'
-            \ . '/usr/lib/gcc/x86_64-pc-linux-gnu/*/include/g++-v6/x86_64-pc-linux-gnu/,'
+            \ . '/usr/lib/gcc/*/*/include/,'
+            \ . '/usr/lib/gcc/*/*/include-fixed/,'
+            \ . '/usr/lib/gcc/*/*/include/g++-v*/,'
+            \ . '/usr/lib/gcc/*/*/include/g++-v*/backward,'
+            \ . '/usr/lib/gcc/*/*/include/g++-v*/*/,'
             \ . '/usr/include/,,'
 
 
@@ -587,6 +585,7 @@ let g:delimitMate_balance_matchpairs = 1
 augroup delimitMateCustom
     autocmd!
     autocmd FileType html,xhtml,xml let b:delimitMate_matchpairs = "(:),[:],{:}"
+    autocmd FileType rust let b:delimitMate_quotes = "\" `"
 augroup END
 
 " close-tag
