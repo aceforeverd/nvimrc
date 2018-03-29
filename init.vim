@@ -251,7 +251,8 @@ endif
 
 Plug 'rhysd/vim-grammarous'
 Plug 'chrisbra/unicode.vim'
-Plug 'aceforeverd/clang_complete', {'for': ['c', 'cpp', 'objc']}
+Plug 'aceforeverd/clang_complete'
+Plug 'vim-scripts/a.vim'
 
 if executable('composer')
     Plug 'phpactor/phpactor', {
