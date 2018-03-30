@@ -31,11 +31,6 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('Shougo/neosnippet-snippets')
     call dein#add('Shougo/neosnippet.vim')
 
-    call dein#add('roxma/nvim-completion-manager')
-    call dein#add('roxma/ncm-clang', {
-                \ 'on_ft': ['c', 'cpp']
-                \ })
-
     " vim
     call dein#add('Shougo/neco-vim')
     " c/c++
@@ -95,6 +90,15 @@ if dein#load_state($HOME . '/.config/nvim/dein.vim')
     call dein#add('neovimhaskell/haskell-vim')
     " asm
     call dein#add('zchee/deoplete-asm')
+    " vimL
+    call dein#add('mhinz/vim-lookup')
+    augroup vim_lookup
+        autocmd!
+        autocmd FileType vim nnoremap <buffer><silent> <C-]> :call lookup#lookup()<CR>
+    augroup END
+
+    call dein#add('tweekmonster/exception.vim')
+    call dein#add('tweekmonster/helpful.vim')
     " html
     call dein#add('othree/html5.vim')
     call dein#add('mattn/emmet-vim')
@@ -253,6 +257,7 @@ Plug 'rhysd/vim-grammarous'
 Plug 'chrisbra/unicode.vim'
 Plug 'aceforeverd/clang_complete'
 Plug 'vim-scripts/a.vim'
+Plug 'beloglazov/vim-online-thesaurus'
 
 if executable('composer')
     Plug 'phpactor/phpactor', {
